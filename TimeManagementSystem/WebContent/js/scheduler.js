@@ -12,7 +12,6 @@ function sendJSON() {
         }
         newEvents.push(eventItem)
     }
-    console.log(newEvents)
     var calendarData = {
         startDate: view.start.format(),
         endDate: view.end.format(),
