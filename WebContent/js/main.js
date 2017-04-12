@@ -47,4 +47,9 @@ function checkPassword(form)
     
     return true;
    
-} 
+}
+
+function postSignOut()
+{
+	
+}
