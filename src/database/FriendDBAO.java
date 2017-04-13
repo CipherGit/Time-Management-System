@@ -75,21 +75,7 @@ public class FriendDBAO {
 			return false;
 		}
     }
-    
-    public boolean deleteFriend(int user1_id, int user2_id) {
-    	try {
-			Statement stmt = con.createStatement();
-			String query = "DELETE FROM "+friends_table+" WHERE "+col_user1_id+" = "+user1_id+" AND "+col_user2_id+" = "+user2_id+"";
-			stmt.executeUpdate(query);
-			stmt.close();
-			return true;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-    }
-    
+       
     public List<Integer> checkFriends (int user1_id) {
     	List<Integer> friends = new ArrayList<Integer>();
     	try {
@@ -124,6 +110,22 @@ public class FriendDBAO {
 			e.printStackTrace();
 		}
     	return friends;
+    }
+    
+    public boolean deleteFriend (int user1_id, int user2_id) {
+    	try {
+			Statement stmt = con.createStatement();
+			String query = "DELETE FROM "+friends_table+" WHERE "+col_user1_id+" = "+user1_id+" AND "+col_user2_id+" = "+user2_id+"";
+			String query2 = "DELETE FROM "+friends_table+" WHERE "+col_user1_id+" = "+user2_id+" AND "+col_user2_id+" = "+user1_id+"";
+			stmt.executeUpdate(query);
+			stmt.executeUpdate(query2);
+			stmt.close();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
     }
 
 }

@@ -34,6 +34,10 @@
 					out.print("<script type=\"text/javascript\">alert('Friend added!');</script>");
 					session.setAttribute("friend_status", "normal");
 				}
+				else if (friend_status.equals("Deleted")) {
+					out.print("<script type=\"text/javascript\">alert('Friend deleted!');</script>");
+					session.setAttribute("friend_status", "normal");
+				}
 			}
 			System.out.println("Login_Success");
 		}
@@ -68,7 +72,12 @@
 				<div class="list-group">
 				<%if(friends_details != null) { %>
 					<%for(int i=0; i<friends_details.size(); i++) { %>
-						<a href="#" class="list-group-item"><%=friends_details.get(i).getName() %></a>
+						<form action="DeleteFriend" method="post">
+							<a href="#" class="list-group-item"><%=friends_details.get(i).getName() %>
+							<button class="btn btn-xs btn-danger" style="float:right;" type="submit" name="delete_user" value="<%=friends_details.get(i).getUsername() %>" >Delete</button>
+							</a>
+							
+						</form>
 					<%} %>
 				<%} 
 				else {%>
