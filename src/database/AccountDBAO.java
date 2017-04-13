@@ -7,6 +7,7 @@ public class AccountDBAO {
 	Connection con;
     private boolean conFree = true;
     private String user_table = "user";
+    private String col_user_id = "user_id";
     private String col_username = "username";
     private String col_password = "password";
     private String col_name = "name";
@@ -175,5 +176,28 @@ public class AccountDBAO {
 			e.printStackTrace();
 		}
     	return userId;
+    }
+    
+    public AccountDetails getUserDetails(int user_id) {
+    	AccountDetails ad = new AccountDetails();
+    	try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT * FROM "+user_table+" WHERE "+col_user_id+" = "+user_id+"";
+			ResultSet rs = stmt.executeQuery(query);
+			stmt.close();
+			while(rs.next()) {
+				String userid = rs.getString(1);
+				ad.setUsername(rs.getString(2));
+				ad.setPassword(rs.getString(3));
+				ad.setName(rs.getString(4));
+				ad.setEmail(rs.getString(5));
+				ad.setSchedule_id(Integer.parseInt(rs.getString(6)));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return ad;
     }
 }

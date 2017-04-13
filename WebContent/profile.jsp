@@ -43,11 +43,20 @@
 	  
 	  <% if(ad != null) { %>
 		  <h1>Welcome <%=ad.getName() %>!</h1>
-		  <p>Your details are as follows:</p>
-		  <div class="list-group profile-details">
-		  	<a href="#" class="list-group-item">Username: <%=ad.getUsername() %></a>
-		  	<a href="#" class="list-group-item">Password: <%=ad.getPassword() %></a>
-		  	<a href="#" class="list-group-item">Email: <%=ad.getEmail() %></a>
+		  <div class="row">
+			  
+			<div class="col-md-6">
+				<p>Your details are as follows:</p>	
+				<div class="list-group">
+					<a href="#" class="list-group-item">Username: <%=ad.getUsername() %></a>
+				  	<a href="#" class="list-group-item">Password: <%=ad.getPassword() %></a>
+				  	<a href="#" class="list-group-item">Email: <%=ad.getEmail() %></a>
+				 </div>
+			</div>
+			<div class="col-md-6">
+				<p>Friends:</p>
+				
+			</div>
 		  </div>
 	  <%} %>
 	  <p>This is your current schedule:</p>

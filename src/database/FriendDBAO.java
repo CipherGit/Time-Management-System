@@ -1,5 +1,7 @@
 package database;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FriendDBAO {
 	Connection con;
@@ -88,6 +90,22 @@ public class FriendDBAO {
 		}
     }
     
-    
+    public List<Integer> checkFriends (int user1_id) {
+    	List<Integer> friends = new ArrayList<Integer>();
+    	try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT "+col_user2_id+" FROM "+friends_table+" WHERE "+col_user1_id+" = "+user1_id+"";
+			ResultSet rs = stmt.executeQuery(query);
+			stmt.close();
+			while(rs.next()) {
+				friends.add(Integer.parseInt(rs.getString(1)));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return friends;
+    }
 
 }
