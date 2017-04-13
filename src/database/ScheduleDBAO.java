@@ -72,8 +72,9 @@ public class ScheduleDBAO {
 		} catch (SQLException e) {
 		    releaseConnection();
 			e.printStackTrace();
+	    	return false;
 		}
-    	return false;
+
     }
     
     public boolean updateSchedule(int schedule_id, String schedule) {
@@ -90,8 +91,9 @@ public class ScheduleDBAO {
         } catch (SQLException e) {
             releaseConnection();
             e.printStackTrace();
+            return false;
         }
-        return false;
+        
     }
     
     public int getId() {
@@ -100,6 +102,7 @@ public class ScheduleDBAO {
 			Statement stmt = con.createStatement();
 			String query = "SELECT LAST_INSERT_ID()";
 			ResultSet rs = stmt.executeQuery(query);
+			stmt.close();
 			int count = 0;
 			while(rs.next()) {
 				count++;

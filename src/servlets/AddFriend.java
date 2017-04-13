@@ -6,6 +6,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import database.AccountDBAO;
+import database.AccountDetails;
 
 /**
  * Servlet implementation class AddFriend
@@ -26,7 +30,24 @@ public class AddFriend extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("check");
+		HttpSession session = request.getSession(true);
+		String add_user= request.getParameter("add_user");
+		AccountDetails ad = (AccountDetails) session.getAttribute("ad");
+		try {
+			AccountDBAO account = new AccountDBAO();
+			int friend_id = account.getUserId(add_user);
+			int user_id = account.getUserId(ad.getUsername());
+			if(friend_id >= 0 && user_id >= 0) {
+				System.out.println(user_id);
+				System.out.println(friend_id);
+			}
+			else {
+				System.out.println("Error finding user ID");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

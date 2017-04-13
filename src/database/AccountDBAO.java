@@ -75,8 +75,8 @@ public class AccountDBAO {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-    	return false;
+			return false;
+		}	
     }
     
     public boolean checkUser(String username, String email) {
@@ -84,6 +84,7 @@ public class AccountDBAO {
 			Statement stmt = con.createStatement();
 			String query = "SELECT * FROM "+user_table+" WHERE "+col_username+" = '"+username+"' OR "+col_email+" = '"+email+"'";
 			ResultSet rs = stmt.executeQuery(query);
+			stmt.close();
 			int count = 0;
 			while(rs.next()) {
 				count++;
@@ -108,6 +109,7 @@ public class AccountDBAO {
 			Statement stmt = con.createStatement();
 			String query = "SELECT * FROM "+user_table+" WHERE "+col_username+" = '"+username+"' AND "+col_password+" = '"+password+"'";
 			ResultSet rs = stmt.executeQuery(query);
+			stmt.close();
 			int count = 0;
 			while(rs.next()) {
 				count++;
@@ -138,6 +140,7 @@ public class AccountDBAO {
 			Statement stmt = con.createStatement();
 			String query = "SELECT * FROM "+user_table+" WHERE "+col_username+" LIKE '%"+username+"%' OR "+col_email+" LIKE '%"+email+"%' OR "+col_name+" LIKE '%"+name+"%'";
 			ResultSet rs = stmt.executeQuery(query);
+			stmt.close();
 			while(rs.next()) {
 				AccountDetails ad = new AccountDetails();
 				String userid = rs.getString(1);
@@ -154,5 +157,23 @@ public class AccountDBAO {
 			e.printStackTrace();
 		}
     	return users;
+    }
+    
+    public int getUserId(String username) {
+    	int userId = -1;
+    	try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT * FROM "+user_table+" WHERE "+col_username+" = '"+username+"'";
+			ResultSet rs = stmt.executeQuery(query);
+			stmt.close();
+			while(rs.next()) {
+				userId = Integer.parseInt(rs.getString(1));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return userId;
     }
 }

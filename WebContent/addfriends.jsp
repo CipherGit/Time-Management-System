@@ -65,7 +65,7 @@
 								<li>Email: <%=search_results.get(i).getEmail() %></li>
 							</ul>
 							<form action="AddFriend" method="post">
-								<button class="btn btn-medium btn-success" type="submit">Add</button>	
+								<button class="btn btn-medium btn-success" type="submit" name="add_user" value="<%=search_results.get(i).getUsername() %>" >Add</button>
 							</form>
 						</div>
 					</div>
