@@ -73,5 +73,21 @@ public class FriendDBAO {
 			return false;
 		}
     }
+    
+    public boolean deleteFriend(int user1_id, int user2_id) {
+    	try {
+			Statement stmt = con.createStatement();
+			String query = "DELETE FROM "+friends_table+" WHERE "+col_user1_id+" = "+user1_id+" AND "+col_user2_id+" = "+user2_id+"";
+			stmt.executeUpdate(query);
+			stmt.close();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+    }
+    
+    
 
 }

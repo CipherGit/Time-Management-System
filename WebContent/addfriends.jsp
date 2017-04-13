@@ -77,9 +77,23 @@
 								<li>Username: <%=search_results.get(i).getUsername() %></li>
 								<li>Email: <%=search_results.get(i).getEmail() %></li>
 							</ul>
-							<form action="AddFriend" method="post">
-								<button class="btn btn-medium btn-success" type="submit" name="add_user" value="<%=search_results.get(i).getUsername() %>" >Add</button>
-							</form>
+							<table>
+								<tr>
+									<td>
+										<form action="AddFriend" method="post">
+											<button class="btn btn-medium btn-success" type="submit" name="add_user" value="<%=search_results.get(i).getUsername() %>" >Add</button>
+										</form>
+									</td>
+									<td>
+										<form action="DeleteFriend" method="post">
+											<button class="btn btn-medium btn-danger" type="submit" name="delete_user" value="<%=search_results.get(i).getUsername() %>" >Delete</button>
+										</form>
+									</td>
+									
+								</tr>
+							</table>
+							
+							
 						</div>
 					</div>
 				</div>
