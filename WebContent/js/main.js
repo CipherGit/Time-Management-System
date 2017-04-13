@@ -48,11 +48,3 @@ function checkPassword(form)
     return true;
    
 }
-<<<<<<< HEAD
-=======
-
-function postSignOut()
-{
-	
-}
->>>>>>> parent of 8c2ed77... Additional files from Gitignore Removal
