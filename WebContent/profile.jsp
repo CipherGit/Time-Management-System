@@ -41,5 +41,11 @@
 <script type="text/javascript" src="js/main.js"></script>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var profilenav = document.querySelector("#profile-nav");
+	provilenav.classList.remove("set-invisible");
+});
+</script>
 </body>
 </html>
