@@ -55,7 +55,6 @@ public class NewUser extends HttpServlet {
 			result = account.addUser(ad);
 			if (result){
 				session.setAttribute("status", "Account_Added");
-				session.setAttribute("ad", ad);
 				response.sendRedirect("profile.jsp");
 				account.remove();
 				return;

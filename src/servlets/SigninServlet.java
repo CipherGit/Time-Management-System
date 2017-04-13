@@ -40,7 +40,6 @@ public class SigninServlet extends HttpServlet {
 			AccountDetails ad = account.loginCheck(username, password);
 			if(ad != null) {
 				session.setAttribute("status", "Login_Success");
-				session.setAttribute("ad", ad);	
 				response.sendRedirect("profile.jsp");
 				account.remove();
 				return;

@@ -48,12 +48,3 @@ body {
 .set-invisible {
     display:none;
 }
-
-.profile-details {
-	max-width: 300px;
-}
-
-.friends-container {
-	max-width: 500px;
-	margin: 0 auto;
-}
