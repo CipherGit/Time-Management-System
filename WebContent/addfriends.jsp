@@ -51,9 +51,11 @@
 				<div class="panel panel-primary">
 					<div class="panel-heading" role="tab" id="heading<%=i%>">
 						<h4 class="panel-title">
+							
 							<a class="collapsed" role="button" data-toggle="collapse" href="#collapse<%=i%>"  aria-expanded="false" aria-controls="collapse<%=i%>">
-								<%=search_results.get(i).getName()%>
+									<%=search_results.get(i).getName()%>
 							</a>
+							
 						</h4>
 					</div>
 					<div id="collapse<%=i%>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%=i%>">
@@ -62,6 +64,9 @@
 								<li>Username: <%=search_results.get(i).getUsername() %></li>
 								<li>Email: <%=search_results.get(i).getEmail() %></li>
 							</ul>
+							<form action="AddFriend" method="post">
+								<button class="btn btn-medium btn-success" type="submit">Add</button>	
+							</form>
 						</div>
 					</div>
 				</div>
