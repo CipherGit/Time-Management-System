@@ -81,10 +81,10 @@ public class ScheduleDBAO {
         try {
             getConnection();
             String query = "UPDATE "+schedule_table+" SET "+col_indiv_sched+" = ? WHERE "+col_schedule_id+" = ?";
-            PreparedStatement stmt = con.prepareStatement(query);     
+            PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, schedule);
             stmt.setInt(2, schedule_id);
-            stmt.executeUpdate(query);
+            stmt.executeQuery();
             stmt.close();
             releaseConnection();
             return true;

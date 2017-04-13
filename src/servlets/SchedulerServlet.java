@@ -19,7 +19,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import database.AccountDBAO;
 import database.AccountDetails;
 import database.ActivityDBAO;
 import database.ActivityDetails;
@@ -70,7 +69,7 @@ public class SchedulerServlet extends HttpServlet {
 
         // If SchedulerServlet receives a JSON file, parse then store it to the database
         // Else SchedulerServlet prepares a JSON file to send to the client with
-        // pre-loaded data about the current user
+        // data about the current user
         if (request.getHeader("Content-type").toLowerCase().contains("json")) {
             JSONParser parser = new JSONParser();
             try {
@@ -88,12 +87,14 @@ public class SchedulerServlet extends HttpServlet {
                 
                 //Store to DB
                 storeDB(request, schedule, activities);
-                response.getWriter().write("<script type=\"text/javascript\">alert('Schedule Saved!');</script>");
+                response.getWriter().println("Schedule Saved!");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             try {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(userSchedtoJson(request));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -241,7 +242,7 @@ public class SchedulerServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
         AccountDetails ad = (AccountDetails) session.getAttribute("ad");
        
-        ActivityDBAO activityDBAO = new ActivityDBAO(); 
+        ActivityDBAO activityDBAO = new ActivityDBAO();
         ArrayList<ActivityDetails> activities = (ArrayList<ActivityDetails>) activityDBAO.fetchAllForSched(ad.getSchedule_id());
         
         JSONArray jarr = new JSONArray();
@@ -252,11 +253,9 @@ public class SchedulerServlet extends HttpServlet {
             jobj.put("end",activities.get(i).getEnd_date());
             jarr.add(jobj);
         }
-        JSONObject events = new JSONObject();
-        events.put("events", jarr);
         
         activityDBAO.remove();
-        return events.toJSONString();
+        return jarr.toJSONString();
     }
 
 }

@@ -115,7 +115,7 @@ public class ActivityDBAO {
     public boolean deleteAllForSched(int schedule_id) {
         try {
             getConnection();
-            String query = "DELETE * "+ "FROM " + activity_table + " WHERE " + col_schedule_id + " = ?";
+            String query = "DELETE "+ "FROM " + activity_table + " WHERE " + col_schedule_id + " = ?";
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setInt(1, schedule_id);
             stmt.executeQuery();
