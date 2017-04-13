@@ -40,7 +40,11 @@ $(document).ready(function() {
     $('#calendar').fullCalendar({
         minTime: minTime,
         maxTime: maxTime,
-        defaultDate: "2017-04-14",
+        defaultDate: "2017-04-05",
+        visibleRange: {
+          start: '2017-04-02',
+          end: '2017-04-08'
+        },
         defaultView: 'agendaWeek',
         columnFormat: 'dddd',
         header: false,
