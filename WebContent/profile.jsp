@@ -17,6 +17,7 @@
 <body>
 <%
 	String status = (String) session.getAttribute("status");
+	String friend_status = (String) session.getAttribute("friend_status");
 	AccountDetails ad = (AccountDetails) session.getAttribute("ad"); 
 	List<AccountDetails> friends_details = (List<AccountDetails>) session.getAttribute("friends_details");
 	if(status != null) {
@@ -28,6 +29,12 @@
 			
 		}
 		else if(status.equals("Login_Success")) {
+			if(friend_status != null) {
+				if(friend_status.equals("Positive")) {
+					out.print("<script type=\"text/javascript\">alert('Friend added!');</script>");
+					session.setAttribute("friend_status", "normal");
+				}
+			}
 			System.out.println("Login_Success");
 		}
 		else {

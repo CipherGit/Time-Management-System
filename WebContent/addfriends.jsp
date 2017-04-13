@@ -28,7 +28,6 @@
 				if(search_status.equals("Positive")) {
 					if(friend_status != null) {
 						if(friend_status.equals("Positive")) {
-							out.print("<script type=\"text/javascript\">alert('Friend added!');</script>");
 							session.setAttribute("friend_status", "normal");
 						}
 						else if(friend_status.equals("Negative")) {

@@ -54,22 +54,26 @@ public class AddFriend extends HttpServlet {
 						isFriends = true;
 					}
 				}
-				System.out.println(isFriends);
 				
 				if(isFriends == false) {
 					boolean result = friend.addFriend(user_id, friend_id);
 					if(result == true) {
 						session.setAttribute("friend_status", "Positive");
 						List<AccountDetails> friends_details = new ArrayList<AccountDetails>();
+						friends = friend.checkFriends(user_id);
+						friends2 = friend.checkFriends2(user_id);
+						for(int i=0; i<friends2.size(); i++) {
+							friends.add(friends2.get(i));
+						}
 						for(int i=0; i<friends.size(); i++) {
 							AccountDetails friend_detail = new AccountDetails();
 							friend_detail = account.getUserDetails(friends.get(i));
 							friends_details.add(friend_detail);
-							session.setAttribute("friends_details", friends_details);
-							response.sendRedirect("profile.jsp");
-							account.remove();
-							friend.remove();
-						}
+						}	
+						session.setAttribute("friends_details", friends_details);
+						response.sendRedirect("profile.jsp");
+						account.remove();
+						friend.remove();
 					}
 					else {
 						session.setAttribute("friend_status", "Negative");
