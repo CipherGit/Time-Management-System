@@ -18,13 +18,13 @@ import database.ScheduleDBAO;
  * Servlet implementation class SingupServlet
  */
 @WebServlet("/SignupServlet")
-public class SingupServlet extends HttpServlet {
+public class SignupServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SingupServlet() {
+    public SignupServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
