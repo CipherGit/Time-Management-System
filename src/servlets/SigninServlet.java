@@ -48,6 +48,20 @@ public class SigninServlet extends HttpServlet {
 				int user1_id = account.getUserId(ad.getUsername());
 				FriendDBAO friend = new FriendDBAO();
 				List<Integer> friends = friend.checkFriends(user1_id);
+				List<Integer> friends2 = friend.checkFriends2(user1_id);
+		
+				for(int i=0; i<friends2.size(); i++) {
+					boolean exist = false;
+					for(int j=0; j<friends.size(); j++) {
+						if(friends2.get(i) == friends.get(j)) {
+							exist = true;
+						}
+					}
+					if(exist == false) {
+						friends.add(friends2.get(i));
+					}
+				}
+				
 				List<AccountDetails> friends_details = new ArrayList<AccountDetails>();
 				for(int i=0; i<friends.size(); i++) {
 					AccountDetails friend_detail = new AccountDetails();

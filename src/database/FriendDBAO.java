@@ -107,5 +107,23 @@ public class FriendDBAO {
 		}
     	return friends;
     }
+    
+    public List<Integer> checkFriends2 (int user1_id) {
+    	List<Integer> friends = new ArrayList<Integer>();
+    	try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT "+col_user1_id+" FROM "+friends_table+" WHERE "+col_user2_id+" = "+user1_id+"";
+			ResultSet rs = stmt.executeQuery(query);
+			stmt.close();
+			while(rs.next()) {
+				friends.add(Integer.parseInt(rs.getString(1)));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return friends;
+    }
 
 }
