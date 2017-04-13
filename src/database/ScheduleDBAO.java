@@ -5,6 +5,7 @@ public class ScheduleDBAO {
 	Connection con;
     private boolean conFree = true;
     private String schedule_table = "tsm_db.schedule";
+    private String col_schedule_id = "schedule_id";
     private String col_indiv_sched = "indiv_sched";
     
     // Database configuration
@@ -60,19 +61,37 @@ public class ScheduleDBAO {
     }
     
     public boolean addSchedule(String schedule) {
-    	
     	try {
+    	    getConnection();
 			Statement stmt = con.createStatement();		
 			String query = "INSERT INTO "+schedule_table+" ("+col_indiv_sched+") VALUES('"+schedule +"')";
 			stmt.executeUpdate(query);
 			stmt.close();
+			releaseConnection();
 			return true;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		    releaseConnection();
 			e.printStackTrace();
 		}
-    	
     	return false;
+    }
+    
+    public boolean updateSchedule(int schedule_id, String schedule) {
+        try {
+            getConnection();
+            String query = "UPDATE "+schedule_table+" SET "+col_indiv_sched+" = ? WHERE "+col_schedule_id+" = ?";
+            PreparedStatement stmt = con.prepareStatement(query);     
+            stmt.setString(1, schedule);
+            stmt.setInt(2, schedule_id);
+            stmt.executeUpdate(query);
+            stmt.close();
+            releaseConnection();
+            return true;
+        } catch (SQLException e) {
+            releaseConnection();
+            e.printStackTrace();
+        }
+        return false;
     }
     
     public int getId() {
@@ -95,7 +114,6 @@ public class ScheduleDBAO {
 			
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return -1;
 		}
