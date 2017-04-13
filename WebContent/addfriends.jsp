@@ -18,16 +18,29 @@
 <%
 	String status = (String) session.getAttribute("status");
 	String search_status = (String) session.getAttribute("search_status");
+	String friend_status = (String) session.getAttribute("friend_status");
 	AccountDetails ad = (AccountDetails) session.getAttribute("ad"); 
 	List<AccountDetails> search_results = (List<AccountDetails>) session.getAttribute("search_results");
 	if(status != null) {
 		if(status.equals("Login_Success")) {
 			System.out.println("Login_Success");
-			if(search_status.equals("Positive")) {
-				System.out.println(""+search_results.size()+" match found");
-			}
-			else {
-				System.out.println("No such user");
+			if(search_status != null) {
+				if(search_status.equals("Positive")) {
+					if(friend_status != null) {
+						if(friend_status.equals("Positive")) {
+							out.print("<script type=\"text/javascript\">alert('Friend added!');</script>");
+							session.setAttribute("friend_status", "normal");
+						}
+						else if(friend_status.equals("Negative")) {
+							out.print("<script type=\"text/javascript\">alert('Error adding friend!');</script>");
+							session.setAttribute("friend_status", "normal");
+						}
+					}
+				}
+				else if(search_status.equals("Negative")) {
+					System.out.println("No such user");
+					session.setAttribute("search_status", "normal");
+				}
 			}
 		}
 		else {

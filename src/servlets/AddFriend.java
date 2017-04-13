@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import database.AccountDBAO;
 import database.AccountDetails;
+import database.FriendDBAO;
 
 /**
  * Servlet implementation class AddFriend
@@ -38,8 +39,19 @@ public class AddFriend extends HttpServlet {
 			int friend_id = account.getUserId(add_user);
 			int user_id = account.getUserId(ad.getUsername());
 			if(friend_id >= 0 && user_id >= 0) {
-				System.out.println(user_id);
-				System.out.println(friend_id);
+				FriendDBAO friend = new FriendDBAO();
+				boolean result = friend.addFriend(user_id, friend_id);
+				if(result == true) {
+					session.setAttribute("friend_status", "Positive");
+					response.sendRedirect("addfriends.jsp");
+					account.remove();
+					friend.remove();
+				}
+				else {
+					session.setAttribute("friend_status", "Negative");
+					account.remove();
+					friend.remove();
+				}
 			}
 			else {
 				System.out.println("Error finding user ID");

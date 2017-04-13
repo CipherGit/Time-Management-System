@@ -40,6 +40,7 @@ public class NewUser extends HttpServlet {
 			ScheduleDBAO schedule = new ScheduleDBAO();
 			schedule.addSchedule(indiv_sched);
 			schedule_id = schedule.getId();
+			schedule.remove();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
