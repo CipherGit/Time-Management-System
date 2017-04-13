@@ -61,7 +61,7 @@
 				<div class="list-group">
 				<%if(friends_details != null) { %>
 					<%for(int i=0; i<friends_details.size(); i++) { %>
-						<a href="#" class="list-group-item"><%=friends_details.get(i).getUsername() %></a>
+						<a href="#" class="list-group-item"><%=friends_details.get(i).getName() %></a>
 					<%} %>
 				<%} 
 				else {%>

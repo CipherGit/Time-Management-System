@@ -43,42 +43,48 @@ public class AddFriend extends HttpServlet {
 			int user_id = account.getUserId(ad.getUsername());
 			if(friend_id >= 0 && user_id >= 0) {
 				FriendDBAO friend = new FriendDBAO();
-				boolean result = friend.addFriend(user_id, friend_id);
-				if(result == true) {
-					session.setAttribute("friend_status", "Positive");
-					
-					List<Integer> friends = friend.checkFriends(user_id);
-					List<Integer> friends2 = friend.checkFriends2(user_id);
-			
-					for(int i=0; i<friends2.size(); i++) {
-						boolean exist = false;
-						for(int j=0; j<friends.size(); j++) {
-							if(friends2.get(i) == friends.get(j)) {
-								exist = true;
-							}
-						}
-						if(exist == false) {
-							friends.add(friends2.get(i));
+				List<Integer> friends = friend.checkFriends(user_id);
+				List<Integer> friends2 = friend.checkFriends2(user_id);
+				for(int i=0; i<friends2.size(); i++) {
+					friends.add(friends2.get(i));
+				}
+				boolean isFriends = false;
+				for(int i=0; i<friends.size(); i++) {
+					if(friends.get(i) == friend_id) {
+						isFriends = true;
+					}
+				}
+				System.out.println(isFriends);
+				
+				if(isFriends == false) {
+					boolean result = friend.addFriend(user_id, friend_id);
+					if(result == true) {
+						session.setAttribute("friend_status", "Positive");
+						List<AccountDetails> friends_details = new ArrayList<AccountDetails>();
+						for(int i=0; i<friends.size(); i++) {
+							AccountDetails friend_detail = new AccountDetails();
+							friend_detail = account.getUserDetails(friends.get(i));
+							friends_details.add(friend_detail);
+							session.setAttribute("friends_details", friends_details);
+							response.sendRedirect("profile.jsp");
+							account.remove();
+							friend.remove();
 						}
 					}
-					
-					List<AccountDetails> friends_details = new ArrayList<AccountDetails>();
-					for(int i=0; i<friends.size(); i++) {
-						AccountDetails friend_detail = new AccountDetails();
-						friend_detail = account.getUserDetails(friends.get(i));
-						friends_details.add(friend_detail);
+					else {
+						session.setAttribute("friend_status", "Negative");
+						response.sendRedirect("addfriends.jsp");
+						account.remove();
+						friend.remove();
 					}
-					session.setAttribute("friends_details", friends_details);
-					response.sendRedirect("profile.jsp");
-					account.remove();
-					friend.remove();
 				}
 				else {
-					session.setAttribute("friend_status", "Negative");
+					session.setAttribute("friend_status", "FriendExist");
+					response.sendRedirect("addfriends.jsp");
 					account.remove();
 					friend.remove();
 				}
-			}
+			}	
 			else {
 				System.out.println("Error finding user ID");
 			}

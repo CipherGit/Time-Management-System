@@ -35,6 +35,10 @@
 							out.print("<script type=\"text/javascript\">alert('Error adding friend!');</script>");
 							session.setAttribute("friend_status", "normal");
 						}
+						else if(friend_status.equals("FriendExist")) {
+							out.print("<script type=\"text/javascript\">alert('Error, friend already added!');</script>");
+							session.setAttribute("friend_status", "normal");
+						}
 					}
 				}
 				else if(search_status.equals("Negative")) {
