@@ -32,6 +32,9 @@
 			response.sendRedirect("profile.jsp");
 			System.out.println("Login_Success");
 		}
+		else if(status.equals("normal")) {
+			System.out.println("normal");
+		}
 	}
 	else {
 		System.out.println("null");

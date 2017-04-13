@@ -1,5 +1,7 @@
 package database;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountDBAO {
 	Connection con;
@@ -128,5 +130,29 @@ public class AccountDBAO {
 			return null;
 		}
 		
+    }
+    
+    public List<AccountDetails> findUsers(String username, String name, String email) {
+    	List<AccountDetails> users = new ArrayList<AccountDetails>();
+    	try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT * FROM "+user_table+" WHERE "+col_username+" LIKE '%"+username+"%' OR "+col_email+" LIKE '%"+email+"%' OR "+col_name+" LIKE '%"+name+"%'";
+			ResultSet rs = stmt.executeQuery(query);
+			while(rs.next()) {
+				AccountDetails ad = new AccountDetails();
+				String userid = rs.getString(1);
+				ad.setUsername(rs.getString(2));
+				ad.setPassword(rs.getString(3));
+				ad.setName(rs.getString(4));
+				ad.setEmail(rs.getString(5));
+				ad.setSchedule_id(Integer.parseInt(rs.getString(6)));
+				users.add(ad);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return users;
     }
 }

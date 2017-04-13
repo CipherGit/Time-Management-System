@@ -1,7 +1,8 @@
 package servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,16 +14,16 @@ import database.AccountDBAO;
 import database.AccountDetails;
 
 /**
- * Servlet implementation class LoginServlet
+ * Servlet implementation class SearchUsers
  */
-@WebServlet("/SigninServlet")
-public class SigninServlet extends HttpServlet {
+@WebServlet("/SearchUsers")
+public class SearchUsers extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SigninServlet() {
+    public SearchUsers() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,26 +32,23 @@ public class SigninServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		HttpSession session = request.getSession(true);
-		String username= request.getParameter("inputUsername");        
-		String password = request.getParameter("inputPassword");
+		String searchInput= request.getParameter("searchInput");
 		try {
 			AccountDBAO account = new AccountDBAO();
-			AccountDetails ad = account.loginCheck(username, password);
-			if(ad != null) {
-				session.setAttribute("status", "Login_Success");
-				session.setAttribute("ad", ad);	
-				response.sendRedirect("profile.jsp");
+			List<AccountDetails> users = account.findUsers(searchInput, searchInput, searchInput);
+			if(users.size()>0) {
+				session.setAttribute("search_status", "Positive");
+				session.setAttribute("search_results", users);
+				response.sendRedirect("addfriends.jsp");
 				account.remove();
-				return;
 			}
 			else {
-				session.setAttribute("status", "Login_Failed");
-				response.sendRedirect("index.jsp");
+				session.setAttribute("search_status", "Negative");
+				response.sendRedirect("addfriends.jsp");
 				account.remove();
-				return;
 			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
