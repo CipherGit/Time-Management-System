@@ -96,6 +96,28 @@ public class ScheduleDBAO {
         
     }
     
+    public ScheduleDetails getSchedule(int schedule_id) {
+        try {
+            getConnection();
+            String query = "SELECT * FROM "+schedule_table + " WHERE "+col_schedule_id+" = ?";
+            PreparedStatement stmt = con.prepareStatement(query);     
+            stmt.setInt(1, schedule_id);
+            ResultSet rs = stmt.executeQuery();
+            
+            ScheduleDetails schedule = null;
+            if (rs.next()) {
+                schedule = new ScheduleDetails(rs.getInt(0), rs.getString(1));
+            }
+            stmt.close();
+            releaseConnection();
+            return schedule;
+        } catch (SQLException e) {
+            releaseConnection();
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     public int getId() {
     	try {
     		int schedule_id = -1;
