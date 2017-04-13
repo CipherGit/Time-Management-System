@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import="java.util.List" %>
 <%@ page import="database.AccountDetails" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
@@ -17,12 +18,14 @@
 <%
 	String status = (String) session.getAttribute("status");
 	AccountDetails ad = (AccountDetails) session.getAttribute("ad"); 
+	List<AccountDetails> friends_details = (List<AccountDetails>) session.getAttribute("friends_details");
 	if(status != null) {
 		if (status.equals("Account_Added")){
 			System.out.println("Account_Added");
 			out.print("<script type=\"text/javascript\">alert('You have successfully joined us!');</script>");
 			session.setAttribute("status", "Login_Success");
 			System.out.println("Login_Success");
+			
 		}
 		else if(status.equals("Login_Success")) {
 			System.out.println("Login_Success");
@@ -55,7 +58,16 @@
 			</div>
 			<div class="col-md-6">
 				<p>Friends:</p>
-				
+				<div class="list-group">
+				<%if(friends_details != null) { %>
+					<%for(int i=0; i<friends_details.size(); i++) { %>
+						<a href="#" class="list-group-item"><%=friends_details.get(i).getUsername() %></a>
+					<%} %>
+				<%} 
+				else {%>
+					<a href="#" class="list-group-item">No friends found. Click on the search bar to add a friend!</a>
+				<%} %>
+				</div>
 			</div>
 		  </div>
 	  <%} %>

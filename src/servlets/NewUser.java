@@ -2,6 +2,8 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import database.AccountDBAO;
 import database.AccountDetails;
+import database.FriendDBAO;
 import database.ScheduleDBAO;
 
 /**
@@ -57,6 +60,16 @@ public class NewUser extends HttpServlet {
 			if (result){
 				session.setAttribute("status", "Account_Added");
 				session.setAttribute("ad", ad);
+				int user1_id = account.getUserId(ad.getUsername());
+				FriendDBAO friend = new FriendDBAO();
+				List<Integer> friends = friend.checkFriends(user1_id);
+				List<AccountDetails> friends_details = new ArrayList<AccountDetails>();
+				for(int i=0; i<friends.size(); i++) {
+					AccountDetails friend_detail = new AccountDetails();
+					friend_detail = account.getUserDetails(friends.get(i));
+					friends_details.add(friend_detail);
+				}
+				session.setAttribute("friends_details", friends_details);
 				response.sendRedirect("profile.jsp");
 				account.remove();
 				return;
