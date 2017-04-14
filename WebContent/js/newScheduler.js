@@ -69,7 +69,7 @@ $(document).ready(function() {
         events: {
             url: 'SchedulerServlet',
             type: 'POST',
-            data: {Purpose: "fetch"},
+            headers: {'Purpose': 'fetch'},
             error: function() {
                 alert('There was an error encountered while fetching data!');
             }
