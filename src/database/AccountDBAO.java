@@ -68,9 +68,15 @@ public class AccountDBAO {
     
     public boolean addUser(AccountDetails ad) {
     	try {
-			Statement stmt = con.createStatement();
-			String query = "INSERT INTO "+user_table+"("+col_username+", "+col_password+", "+col_name+", "+col_email+", "+col_schedule_id+") VALUES ('"+ad.getUsername()+"', '"+ad.getPassword()+"', '"+ad.getName()+"', '"+ad.getEmail()+"', "+ad.getSchedule_id()+")";
-			stmt.executeUpdate(query);
+    		getConnection();
+			String query = "INSERT INTO "+user_table+"("+col_username+", "+col_password+", "+col_name+", "+col_email+", "+col_schedule_id+") VALUES (?,?,?,?,?)";
+			PreparedStatement stmt = con.prepareStatement(query);
+			stmt.setString(1, ad.getUsername());
+			stmt.setString(2, ad.getPassword());
+			stmt.setString(3, ad.getName());
+			stmt.setString(4, ad.getEmail());
+			stmt.setInt(5, ad.getSchedule_id());
+			stmt.executeUpdate();
 			stmt.close();
 			return true;
 		} catch (SQLException e) {

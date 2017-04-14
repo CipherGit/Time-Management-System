@@ -6,6 +6,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import database.AccountDBAO;
+import database.AccountDetails;
+import database.GroupDBAO;
+import database.GroupDetails;
 
 /**
  * Servlet implementation class NewGroup
@@ -26,7 +32,34 @@ public class NewGroup extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		HttpSession session = request.getSession(true);
+		String groupName = request.getParameter("groupName");
+		String groupDesc = request.getParameter("groupDesc");
+		String groupSched = ""; //put schedule string of the group here
+		AccountDetails ad = (AccountDetails) session.getAttribute("ad");
+		try {
+			AccountDBAO account = new AccountDBAO();
+			int user_id = account.getUserId(ad.getUsername());
+			GroupDBAO group = new GroupDBAO();
+			GroupDetails gd = new GroupDetails(groupName, groupDesc, user_id, groupSched);
+			boolean result = group.addGroup(gd);
+			if(result == true) {
+				session.setAttribute("add_group", "Positive");
+				response.sendRedirect("group.jsp");
+				account.remove();
+				group.remove();
+			}
+			else {
+				session.setAttribute("add_group", "Negative");
+				response.sendRedirect("group.jsp");
+				account.remove();
+				group.remove();
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

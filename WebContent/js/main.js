@@ -12,7 +12,6 @@ function returnForm()
 
 function checkPassword(form)   
 {   
-    console.log("bla")
     var d = document.getElementById("passwordClass");
     if(form.inputPassword.value == form.inputPassword2.value) {
       if(form.inputPassword.value.length < 6) {
@@ -27,20 +26,19 @@ function checkPassword(form)
       }
       re = /[0-9]/;
       if(!re.test(form.inputPassword.value)) {
-        alert("Error: password must contain at least one number (0-9)!");
+        alert("Error: Password must contain at least one number (0-9)!");
         d.className += " has-error";
         return false;
       }
-      re = /^[a-zA-Z]\w{6,30}$/;
+      re = /^[a-zA-Z].*/;
       if(!re.test(form.inputPassword.value)) {
-        alert("Error: password must not contain any special characters except underscore, and first character must be a letter!");
+        alert("Error: The first character in password must be a letter!");
         d.className += " has-error";
         return false;
       }
  
     } else {
       alert("Error: Please check that your passwords match!");
-      console.log("bla")
       d.className += " has-error";
       return false;
     }

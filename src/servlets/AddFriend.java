@@ -35,7 +35,7 @@ public class AddFriend extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
-		String add_user= request.getParameter("add_user");
+		String add_user = request.getParameter("add_user");
 		AccountDetails ad = (AccountDetails) session.getAttribute("ad");
 		try {
 			AccountDBAO account = new AccountDBAO();

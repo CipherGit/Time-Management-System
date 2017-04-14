@@ -16,10 +16,21 @@
 <body>
 <%
 	String status = (String) session.getAttribute("status");
+	String add_group = (String) session.getAttribute("add_group");
 	AccountDetails ad = (AccountDetails) session.getAttribute("ad");
 	if(status != null) {
 		if(status.equals("Login_Success")) {
 			System.out.println("Login_Success");
+			if(add_group != null) {
+				if(add_group.equals("Positive")) {
+					out.print("<script type=\"text/javascript\">alert('Group created!');</script>");
+					session.setAttribute("add_group", "normal");
+				}
+				else if(add_group.equals("Negative")) {
+					out.print("<script type=\"text/javascript\">alert('Error creating group!');</script>");
+					session.setAttribute("add_group", "normal");
+				}
+			}
 		}
 		else {
 			response.sendRedirect("index.jsp");
@@ -35,8 +46,11 @@
 
 <div class="container">
 	<div class="jumbotron">
-		<form method="post">
-			<input type="text" name="groupName" required></input>
+		<form method="post" action="NewGroup">
+			<input type="text" name="groupName" placeholder=" Group name" required></input>
+			<br/>
+			<textarea type="text" name="groupDesc" placeholder=" Group description"></textarea>
+			<br/>
 			<button type="submit" class="btn btn-medium btn-primary">Create Group</button>
 		</form>
 		<h2>Your Groups:</h2>
