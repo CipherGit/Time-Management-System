@@ -17,6 +17,7 @@ import database.AccountDBAO;
 import database.AccountDetails;
 import database.ActivityDBAO;
 import database.ActivityDetails;
+import database.GroupDBAO;
 import database.ScheduleDBAO;
 
 /**
@@ -46,14 +47,21 @@ public class GroupSchedulerServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    
-	    //For test purposes - Please modify later 
 		try {
-            AccountDBAO accountDBAO = new AccountDBAO();
-            ArrayList<AccountDetails> users = new ArrayList<AccountDetails>();
-            users.add(accountDBAO.getUserDetails(1));
-            users.add(accountDBAO.getUserDetails(3));
-            users.add(accountDBAO.getUserDetails(5));
-            
+		    AccountDBAO accountDBAO = new AccountDBAO();
+		    GroupDBAO groupDBAO = new GroupDBAO();
+		    ArrayList<AccountDetails> users = new ArrayList<AccountDetails>();
+		    String group = request.getParameter("group");
+		    if(group != null) {
+		        int group_id = Integer.parseInt(group);
+		        List<Integer> userList = groupDBAO.getUsersInGroup(group_id);
+		        groupDBAO.remove();
+		        for(int i=0; i<userList.size(); i++) {
+		            users.add(accountDBAO.getUserDetails(userList.get(i)));
+		        }
+		        accountDBAO.remove();
+		    }
+		    
             response.setHeader("Content-type", "application/json");
             response.getWriter().println(createDisplayFromUsers(users));
         } catch (Exception e) {

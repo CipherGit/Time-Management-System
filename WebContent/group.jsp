@@ -10,9 +10,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Groups</title>
-
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.3.1/fullcalendar.min.css'/>
+<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.3.1/fullcalendar.print.css' media='print'/>
 </head>
 <body>
 <%
@@ -83,7 +84,6 @@
 
 <div id="nav-here2"></div>
 
-
 <div class="container">
 	<div class="jumbotron">
 		<form method="post" action="NewGroup">
@@ -111,10 +111,7 @@
 						<h3>Description:</h3>
 						<p><%=groups.get(i).getDescription() %></p>
 						<h3>Group Schedule:</h3>
-						<div>
-							<!-- insert group schedule here -->
-						
-						</div>
+						<div id="calendar<%=i%>"></div>
 						<div class="row">
 							<div class="col-md-3">
 								<button class="btn btn-medium btn-success" type="button" data-toggle="modal" data-target="#addMembers" data-group-id="<%=groups.get(i).getGroup_id() %>" data-username="<%=ad.getUsername() %>">Add Members</button>
@@ -183,16 +180,44 @@
 	</div>
 </div>
 
+<div id="TimeSlotDetail" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 id="TimeSlotHeader">Modal Header</h3>
+				<p id="availabilityCount">Availability Count: </p>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-6">
+							<p>Available:</p>
+							<ul id="availableList"></ul>
+						</div>
+						<div class="col-md-6">
+							<p>Unavailable:</p>
+							<ul id="unavailableList"></ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript" src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js'></script>
+<script type="text/javascript" src='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.3.1/fullcalendar.min.js'></script>
 <script type="text/javascript" src="js/myjquery.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src='js/groupDisplay.js'></script>
 <script type="text/javascript">
 $('#addMembers').on('show.bs.modal', function(e) {
-
     //get data-id attribute of the clicked element
     var groupId = $(e.relatedTarget).data('group-id');
     var username = $(e.relatedTarget).data('username');
- 
     $.ajax({
     	type: "POST",
     	url: "ShowFriends",
@@ -201,15 +226,11 @@ $('#addMembers').on('show.bs.modal', function(e) {
     		$('#friendsList').html(response);
     	}
     });
-    
 });
-
 $('#showMembers').on('show.bs.modal', function(e) {
-
     //get data-id attribute of the clicked element
     var groupId = $(e.relatedTarget).data('group-id');
     var username = $(e.relatedTarget).data('username');
- 
     $.ajax({
     	type: "POST",
     	url: "ShowMembers",
@@ -218,7 +239,36 @@ $('#showMembers').on('show.bs.modal', function(e) {
     		$('#membersList').html(response);
     	}
     });
-    
+});
+
+//Calendar Code
+$(document).ready(function() {
+<%for(int i=0; i<groups.size(); i++) { %>
+	$('#calendar<%=i%>').fullCalendar({
+	    minTime: minTime,
+	    maxTime: maxTime,
+	    defaultDate: "2017-04-05",
+	    visibleRange: {
+	      start: '2017-04-02',
+	      end: '2017-04-08'
+	    },
+	    defaultView: 'agendaWeek',
+	    columnFormat: 'dddd',
+	    header: false,
+	    allDaySlot: false,
+	    editable: false,
+	    events: [],
+	    dayClick: function(date, jsEvent, view) {
+	      $('#TimeSlotHeader').html(date.format('dddd, h:mma'))
+	      $('#TimeSlotDetail').modal({show:true})
+	      getIndex(<%=i%>, date);
+	    }
+	});
+	$('#collapse<%=i%>').on('shown.bs.collapse', function () {
+	  $('#calendar<%=i%>').fullCalendar('render');
+	});
+	retrieveData(<%=i%>, <%=groups.get(i).getGroup_id() %>)
+<%}%>
 });
 </script>
 </body>

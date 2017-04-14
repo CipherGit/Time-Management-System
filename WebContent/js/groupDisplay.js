@@ -1,69 +1,54 @@
-var groupMembers = [];
-var allEvents = [];
+var allData = [];
 var minTime = "05:00:00"
 var maxTime = "24:00:00"
 
 //Retrieve Data from Servlet via AJAX
-function retrieveData() {
+function retrieveData(i, groupID) {
   $.ajax({
     type: 'POST',
     url: 'GroupSchedulerServlet',
+    data:{group:groupID},
     dataType: 'json',
     success: function(data) {
-      //Clear global arrays
-      allEvents.length = 0;
-      groupMembers.length = 0;
+
+      var groupMembers = [];
+      var allEvents = [];
 
       //Fill them with new information
-      for(var i = 0; i<data.length; i++){
+      for(var j = 0; j<data.length; j++){
         var groupMember = {
-          name: data[i].name,
-          username: data[i].username,
-          schedule: data[i].schedule.split("")
+          name: data[j].name,
+          username: data[j].username,
+          schedule: data[j].schedule.split("")
         }
         groupMembers.push(groupMember);
-        events = data[i].events
-        for(var j = 0; j<events.length; j++){
+        events = data[j].events
+        for(var k = 0; k<events.length; k++){
           var eventItem = {
-            title: events[j].title,
-            start: events[j].start,
-            end: events[j].end,
+            title: events[k].title,
+            start: events[k].start,
+            end: events[k].end,
             rendering: 'background',
             backgroundColor: "rgba(0, 255, 0, " + 1/data.length + ")"
           }
           allEvents.push(eventItem);
         }
       }
-      $('#calendar').fullCalendar('removeEvents');
-      $('#calendar').fullCalendar('addEventSource', allEvents);
-      $('#calendar').fullCalendar('rerenderEvents');
+      var dataSample = {
+        gms: groupMembers,
+        aes: allEvents
+      }
+      allData.push(dataSample);
+      console.log(i);
+      console.log(allData);
+      $('#calendar'+i).fullCalendar('removeEvents');
+      $('#calendar'+i).fullCalendar('addEventSource', allData[i].aes);
+      $('#calendar'+i).fullCalendar('rerenderEvents');
     }
   });
-}
-$(document).ready(function() {
-    $('#calendar').fullCalendar({
-        minTime: minTime,
-        maxTime: maxTime,
-        defaultDate: "2017-04-05",
-        visibleRange: {
-          start: '2017-04-02',
-          end: '2017-04-08'
-        },
-        defaultView: 'agendaWeek',
-        columnFormat: 'dddd',
-        header: false,
-        allDaySlot: false,
-        editable: false,
-        events: [],
-        dayClick: function(date, jsEvent, view) {
-          $('#TimeSlotHeader').html(date.format('dddd, h:mma'))
-          $('#TimeSlotDetail').modal({show:true})
-          getIndex(date);
-        }
-    });
-});
-function getIndex(date) {
-  var view = $('#calendar').fullCalendar('getView');
+};
+function getIndex(i, date) {
+  var view = $('#calendar'+i).fullCalendar('getView');
   var calendarData = {
       startDate: view.start.format(),
       endDate: view.end.format(),
@@ -77,46 +62,46 @@ function getIndex(date) {
     headers: { 'Purpose': 'index' },
     dataType: 'json',
     success: function (response) {
-      calculateAvailability(response);
+      calculateAvailability(i, response);
     },
     data: JSON.stringify(calendarData)
   });
 }
-function calculateAvailability(index){
-  if(groupMembers.length > 0) {
+function calculateAvailability(i, index){
+  if(allData[i].gms.length > 0) {
     var available = [];
     var unavailable = [];
     var availabilityCount = 0;
-    for(var i = 0; i<groupMembers.length; i++){
-      var availability = parseInt(groupMembers[i].schedule[index]);
+    for(var j = 0; j<allData[i].gms.length; j++){
+      var availability = parseInt(allData[i].gms[j].schedule[index]);
       availabilityCount += availability;
       if(availability === 1){
-        available.push(groupMembers[i].name);
+        available.push(allData[i].gms[j].name);
       } else {
-        unavailable.push(groupMembers[i].name);
+        unavailable.push(allData[i].gms[j].name);
       }
     }
-    modifyModal(availabilityCount, available, unavailable)
+    modifyModal(i, availabilityCount, available, unavailable)
   }
 }
-function modifyModal(availabilityCount, available, unavailable){
-  $('#availabilityCount').html("Availability Count: "+availabilityCount+"/"+groupMembers.length);
+function modifyModal(i, availabilityCount, available, unavailable){
+  $('#availabilityCount').html("Availability Count: "+availabilityCount+"/"+allData[i].gms.length);
 
   // clear the existing list
   $('#availableList li').remove();
   $('#unavailableList li').remove();
 
   var aList = $('ul#availableList')
-  $.each(available, function(i) {
+  $.each(available, function(j) {
       var li = $('<li/>')
-      .text(available[i])
+      .text(available[j])
       .appendTo(aList);
   });
 
   var uList = $('ul#unavailableList')
-  $.each(unavailable, function(i) {
+  $.each(unavailable, function(j) {
       var li = $('<li/>')
-      .text(unavailable[i])
+      .text(unavailable[j])
       .appendTo(uList);
   });
 }
