@@ -28,6 +28,7 @@ function sendJSON() {
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.setRequestHeader("Schedule-type", "new");
+    xhr.setRequestHeader("Purpose", "modify");
     xhr.onreadystatechange = function() {
         if (this.readyState !== 4) return; // not ready yet
         if (this.status === 200) { // HTTP 200 OK

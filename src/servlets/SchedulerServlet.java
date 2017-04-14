@@ -67,11 +67,13 @@ public class SchedulerServlet extends HttpServlet {
         } finally {
             reader.close();
         }
+        
+        System.out.println(sb.toString());
 
         // If SchedulerServlet receives a JSON file, parse then store it to the database
         // Else SchedulerServlet prepares a JSON file to send to the client with
         // data about the current user
-        if (request.getHeader("Content-type").toLowerCase().contains("json")) {
+        if (request.getHeader("Purpose").toLowerCase().contains("modify")) {
             JSONParser parser = new JSONParser();
             try {
                 //Parse JSON
@@ -91,6 +93,26 @@ public class SchedulerServlet extends HttpServlet {
                 if(request.getHeader("Schedule-type").equals("update")){
                     response.getWriter().println("Schedule Saved!");
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if(request.getHeader("Purpose").toLowerCase().contains("index")) {
+            JSONParser parser = new JSONParser();
+            try {
+                //Parse JSON
+                JSONObject jobj = (JSONObject) parser.parse(sb.toString());
+                String startDate = (String) jobj.get("startDate");
+                String endDate = (String) jobj.get("endDate");
+                String minTime = (String) jobj.get("minTime");
+                String maxTime = (String) jobj.get("maxTime");
+                String slot = (String) jobj.get("slot");
+                
+                String[] activityDT = slot.split("T");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                int timeSteps = calculateTimeSteps(format, startDate, minTime, maxTime);
+                int index = getIndex(format, startDate + "T" + minTime, activityDT[0] + "T" + minTime, slot, timeSteps);
+                
+                response.getWriter().println(index);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -144,16 +166,7 @@ public class SchedulerServlet extends HttpServlet {
         }
 
         // Get time steps per day
-        int timeSteps = 0;
-        try {
-            startCal = format.parse(startDate + "T" + minTime);
-            endCal = format.parse(startDate + "T" + maxTime);
-            long diff = endCal.getTime() - startCal.getTime();
-            int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(diff);
-            timeSteps = minutes / 30;
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-        }
+        int timeSteps = calculateTimeSteps(format, startDate, minTime, maxTime);
 
         // Create Schedule array
         int[] schedule = new int[numDays * timeSteps];
@@ -264,6 +277,28 @@ public class SchedulerServlet extends HttpServlet {
         
         activityDBAO.remove();
         return jarr.toJSONString();
+    }
+    
+    /**
+     * calculateTimeSteps - returns the timesteps per day
+     * @param format
+     * @param date
+     * @param minTime
+     * @param maxTime
+     * @return
+     */
+    private int calculateTimeSteps(SimpleDateFormat format, String date, String minTime, String maxTime){
+        int timeSteps = 0;
+        try {
+            Date startTime = format.parse(date + "T" + minTime);
+            Date endTime = format.parse(date + "T" + maxTime);
+            long diff = endTime.getTime() - startTime.getTime();
+            int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(diff);
+            timeSteps = minutes / 30;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return timeSteps;
     }
 
 }

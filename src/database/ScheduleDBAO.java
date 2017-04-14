@@ -106,7 +106,7 @@ public class ScheduleDBAO {
             
             ScheduleDetails schedule = null;
             if (rs.next()) {
-                schedule = new ScheduleDetails(rs.getInt(0), rs.getString(1));
+                schedule = new ScheduleDetails(rs.getInt(1), rs.getString(2));
             }
             stmt.close();
             releaseConnection();
