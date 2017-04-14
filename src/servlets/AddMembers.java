@@ -35,23 +35,23 @@ public class AddMembers extends HttpServlet {
 		String group_id = request.getParameter("group_id");
 		boolean result = false;
 		try {
-			AccountDBAO account = new AccountDBAO();
-			GroupDBAO group = new GroupDBAO();
-			for(int i=0; i<members.length;i++) {
+			System.out.println(members.length);
+			for(int i=0; i<members.length; i++) {
+				AccountDBAO account = new AccountDBAO();
+				GroupDBAO group = new GroupDBAO();
 				int user_id = account.getUserId(members[i]);
 				result = group.addUserToGroup(user_id, Integer.parseInt(group_id));
+				account.remove();
+				System.out.println(i);
 			}
+			System.out.println("check");
 			if(result==true) {
 				session.setAttribute("members_status", "Added");
-				response.sendRedirect("group.jsp");
-				account.remove();
-				group.remove();
+				response.sendRedirect("group.jsp");	
 			}
 			else {
 				session.setAttribute("members_status", "Error");
 				response.sendRedirect("group.jsp");
-				account.remove();
-				group.remove();
 			}
 			
 		} catch (Exception e) {
