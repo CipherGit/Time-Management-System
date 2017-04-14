@@ -47,7 +47,7 @@
 	<h2 style="text-align:center;">Set Your Schedule:</h2>
 	<div id="calendar"></div>
 	
-	<button class="form-schedule btn btn-lg btn-primary btn-block" onclick="sendJSON()">Finish</button>
+	<button class="form-schedule btn btn-lg btn-primary btn-block" style="margin-top: 30px;" onclick="sendJSON()">Finish</button>
 
 </div>
 
