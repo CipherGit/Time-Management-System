@@ -122,18 +122,18 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<input name="groupId"></input>
-				<input name="username"></input>
-				
 				<h4 class="modal-title" id="myModalLabel">Add Members</h4>
 			</div>
+			<form action="AddMembers" method="post">
 			<div class="modal-body">
+				<h3>Friends:</h3>
 				<div id="friendsList"></div>
 			</div>
 			<div class="modal-footer">
 		    	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-primary">Save changes</button>
+		        <button type="submit" class="btn btn-primary" value="Submit">Add Friends</button>
 		    </div>
+		    </form>
 		</div>
 	</div>
 </div>
@@ -148,16 +148,13 @@ $('#addMembers').on('show.bs.modal', function(e) {
     //get data-id attribute of the clicked element
     var groupId = $(e.relatedTarget).data('group-id');
     var username = $(e.relatedTarget).data('username');
-    //populate the textbox
-    $(e.currentTarget).find('input[name="groupId"]').val(groupId);
-    $(e.currentTarget).find('input[name="username"]').val(username);
-    
+ 
     $.ajax({
     	type: "POST",
     	url: "ShowFriends",
     	data: {"groupId":groupId, "username":username},
     	success: function(response) {
-    		$('#friendsList').html(data);
+    		$('#friendsList').html(response);
     	}
     });
     

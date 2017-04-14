@@ -48,15 +48,17 @@ public class ShowFriends extends HttpServlet {
 			response.setContentType("text/html;charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.println("<div class=\"checkbox\">");
-			
+			out.println("<div class=\"list-group\">");
 			for(int i=0; i<friends.size(); i++) {
 				AccountDetails friend_detail = new AccountDetails();
 				friend_detail = account.getUserDetails(friends.get(i));
-				out.println("<label><input type=\"checkbox\">");
+				out.println("<label class=\"list-group-item\" style=\"padding-left: 30px;\"><input type=\"checkbox\" name=\"members\" value=\""+friend_detail.getUsername()+"\">");
 				out.println(friend_detail.getName());
 				out.println("</label>");
 			}
 			out.println("</div>");
+			out.println("</div>");
+			out.println("<input name=\"group_id\" value=\""+group_id+"\" style=\"display:none;\">");
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
