@@ -25,22 +25,21 @@
 		<div id="nav-here"></div>
 	<%} %>
 
-<div id="nav-here"></div>
 <div class="container">
 
 	<div class="jumbotron">
 	  <h1>MeetU</h1>
 	  <h2>Time Management System</h2>
-	  <p>Nowadays, people are more and more busy with various kinds of activities, so the schedules and available time for each person are commonly different from others’. For some shared activities or plans, it is not easy to create an available time slot for all participants, especially for activities or plans that have many participants. Thus, digital schedule came out, which allows each participant to create his or her own digital schedules in the system, and share his or her schedule to other people. The system can consolidate all digital schedules to find out the overlapping available time slots, after which users can plan on what to do on these free time slots.</p>
-	  <p>Finding a common available time slot is the premise to create schedule for a  group of users. This app allows users to:</p>
-	  <ul>
+	  <p style="text-align:justify;">Nowadays, people are more and more busy with various kinds of activities, so the schedules and available time for each person are commonly different from others’. For some shared activities or plans, it is not easy to create an available time slot for all participants, especially for activities or plans that have many participants. Thus, digital schedule came out, which allows each participant to create his or her own digital schedules in the system, and share his or her schedule to other people. The system can consolidate all digital schedules to find out the overlapping available time slots, after which users can plan on what to do on these free time slots.</p>
+	  <p style="text-align:justify;">Finding a common available time slot is the premise to create schedule for a  group of users. This app allows users to:</p>
+	  <ul style="font-size:20px;">
 	  	<li>Create his/her own digital schedule and add activities</li>
 	  	<li>Share schedule to other users in a group</li>
 	  	<li>Invite friend to join groups and plan for group activities</li>
 	  </ul>
 	  <span>*Take note that the assumption here is that users have a fixed schedule</span>
  
-	  <p><a class="btn btn-primary btn-lg" href="index.jsp" role="button">Give it a try!</a></p>
+	  <p><a class="btn btn-primary btn-lg" style="margin-top: 20px;" href="index.jsp" role="button">Give it a try!</a></p>
 	</div>
 </div>
 
