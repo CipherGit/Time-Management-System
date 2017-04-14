@@ -72,17 +72,22 @@
 			<div class="col-md-6">
 				<p>Friends:</p>
 				<div class="list-group">
-				<%if(friends_details.size() > 0) { %>
-					<%for(int i=0; i<friends_details.size(); i++) { %>
-						<form action="DeleteFriend" method="post">
-							<a href="#" class="list-group-item"><%=friends_details.get(i).getName() %>
-							<button class="btn btn-xs btn-danger" style="float:right;" type="submit" name="delete_user" value="<%=friends_details.get(i).getUsername() %>" >Delete</button>
-							</a>
-							
-						</form>
+				<%if(friends_details != null) {%>
+					<%if(friends_details.size() > 0) { %>
+						<%for(int i=0; i<friends_details.size(); i++) { %>
+							<form action="DeleteFriend" method="post">
+								<a href="#" class="list-group-item"><%=friends_details.get(i).getName() %>
+								<button class="btn btn-xs btn-danger" style="float:right;" type="submit" name="delete_user" value="<%=friends_details.get(i).getUsername() %>" >Delete</button>
+								</a>
+								
+							</form>
+						<%} %>
+					<%} 
+					else {%>
+						<a href="#" class="list-group-item">No friends found. Click on the search bar to add a friend!</a>
 					<%} %>
-				<%} 
-				else {%>
+				<%}
+				else {%>	
 					<a href="#" class="list-group-item">No friends found. Click on the search bar to add a friend!</a>
 				<%} %>
 				</div>
@@ -93,10 +98,14 @@
 	  <p>Feel free to make some changes and click the button below to save.</p>
 	  <div id='calendar'></div>
 	  
-	  <p><a class="btn btn-primary btn-lg" onClick="sendJSON()" role="button">Save Changes</a></p>
+	  <p><a class="btn btn-primary btn-lg" style="margin-top: 30px;" onClick="sendJSON()" role="button">Save Changes</a></p>
 	</div>
+
+
 </div>
 
+<script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src='//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script>
 <script type="text/javascript" src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
