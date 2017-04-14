@@ -7,6 +7,7 @@ public class GroupDBAO {
 	Connection con;
     private boolean conFree = true;
     private String group_table = "group_t";
+    private String col_group_id = "group_id";
     private String col_name = "name";
     private String col_desc = "description";
     private String col_user_id = "user_id";
@@ -106,6 +107,20 @@ public class GroupDBAO {
 			e.printStackTrace();
 		}
     	return groups;
+    }
+    
+    public boolean deleteGroup(int group_id) {
+    	try {
+			Statement stmt = con.createStatement();
+			String query = "DELETE FROM "+group_table+" WHERE "+col_group_id+" = "+group_id;
+			stmt.executeUpdate(query);
+			stmt.close();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
     }
     
     
