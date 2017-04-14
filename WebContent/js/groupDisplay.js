@@ -77,8 +77,46 @@ function getIndex(date) {
     headers: { 'Purpose': 'index' },
     dataType: 'json',
     success: function (response) {
-      alert(response);
+      calculateAvailability(response);
     },
     data: JSON.stringify(calendarData)
+  });
+}
+function calculateAvailability(index){
+  if(groupMembers.length > 0) {
+    var available = [];
+    var unavailable = [];
+    var availabilityCount = 0;
+    for(var i = 0; i<groupMembers.length; i++){
+      var availability = parseInt(groupMembers[i].schedule[index]);
+      availabilityCount += availability;
+      if(availability === 1){
+        available.push(groupMembers[i].name);
+      } else {
+        unavailable.push(groupMembers[i].name);
+      }
+    }
+    modifyModal(availabilityCount, available, unavailable)
+  }
+}
+function modifyModal(availabilityCount, available, unavailable){
+  $('#availabilityCount').html("Availability Count: "+availabilityCount+"/"+groupMembers.length);
+
+  // clear the existing list
+  $('#availableList li').remove();
+  $('#unavailableList li').remove();
+
+  var aList = $('ul#availableList')
+  $.each(available, function(i) {
+      var li = $('<li/>')
+      .text(available[i])
+      .appendTo(aList);
+  });
+
+  var uList = $('ul#unavailableList')
+  $.each(unavailable, function(i) {
+      var li = $('<li/>')
+      .text(unavailable[i])
+      .appendTo(uList);
   });
 }

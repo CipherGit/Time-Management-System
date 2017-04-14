@@ -67,8 +67,6 @@ public class SchedulerServlet extends HttpServlet {
         } finally {
             reader.close();
         }
-        
-        System.out.println(sb.toString());
 
         // If SchedulerServlet receives a JSON file, parse then store it to the database
         // Else SchedulerServlet prepares a JSON file to send to the client with

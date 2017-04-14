@@ -18,18 +18,19 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h3 id='TimeSlotHeader'>Modal with container fluid</h3>
+				<h3 id="TimeSlotHeader">Modal Header</h3>
+				<p id="availabilityCount">Availability Count: </p>
 			</div>
 			<div class="modal-body">
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-md-6">
 							<p>Available:</p>
-							<div id="availableList"></div>
+							<ul id="availableList"></ul>
 						</div>
 						<div class="col-md-6">
 							<p>Unavailable:</p>
-							<div id="availableList"></div>
+							<ul id="unavailableList"></ul>
 						</div>
 					</div>
 				</div>
@@ -42,7 +43,7 @@
 </div>
 <script type="text/javascript" src='//code.jquery.com/jquery-3.2.1.min.js'></script>
 <script type="text/javascript" src='//code.jquery.com/ui/1.12.1/jquery-ui.min.js'></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js'></script>
 <script type="text/javascript" src='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.3.1/fullcalendar.min.js'></script>
 <script type="text/javascript" src='js/groupDisplay.js'></script>
