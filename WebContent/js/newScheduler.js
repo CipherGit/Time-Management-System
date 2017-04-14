@@ -27,6 +27,7 @@ function sendJSON() {
     var url = "SchedulerServlet";
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader("Purpose", "modify");
     xhr.setRequestHeader("Schedule-type", "new");
     xhr.onreadystatechange = function() {
         if (this.readyState !== 4) return; // not ready yet
