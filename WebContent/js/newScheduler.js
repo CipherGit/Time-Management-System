@@ -28,7 +28,6 @@ function sendJSON() {
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.setRequestHeader("Schedule-type", "new");
-    xhr.setRequestHeader("Purpose", "modify");
     xhr.onreadystatechange = function() {
         if (this.readyState !== 4) return; // not ready yet
         if (this.status === 200) { // HTTP 200 OK
@@ -70,6 +69,7 @@ $(document).ready(function() {
         events: {
             url: 'SchedulerServlet',
             type: 'POST',
+            data: {Purpose: "fetch"},
             error: function() {
                 alert('There was an error encountered while fetching data!');
             }
@@ -77,13 +77,11 @@ $(document).ready(function() {
         eventRender: function(event, element) {
             element.bind('dblclick', function() {
                 if (confirm("Delete the event: " + event.title + "?")) {
-                    console.log("Deleting")
                     $('#calendar').fullCalendar('removeEvents', event._id)
                     $('#calendar').fullCalendar('rerenderEvents')
                 } else {
                     //Do Nothing
                 }
-                console.log('Double Clicked!')
             });
         }
     });

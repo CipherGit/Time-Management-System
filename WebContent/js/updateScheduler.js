@@ -70,6 +70,7 @@ $(document).ready(function() {
         events: {
             url: 'SchedulerServlet',
             type: 'POST',
+            headers: {'Purpose': 'fetch'},
             error: function() {
                 alert('There was an error encountered while fetching data!');
             }
@@ -77,13 +78,11 @@ $(document).ready(function() {
         eventRender: function(event, element) {
             element.bind('dblclick', function() {
                 if (confirm("Delete the event: " + event.title + "?")) {
-                    console.log("Deleting")
                     $('#calendar').fullCalendar('removeEvents', event._id)
                     $('#calendar').fullCalendar('rerenderEvents')
                 } else {
                     //Do Nothing
                 }
-                console.log('Double Clicked!')
             });
         }
     });

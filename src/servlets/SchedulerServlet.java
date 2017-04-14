@@ -38,7 +38,6 @@ public class SchedulerServlet extends HttpServlet {
      */
     public SchedulerServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     /**
@@ -67,60 +66,60 @@ public class SchedulerServlet extends HttpServlet {
         } finally {
             reader.close();
         }
-
-        // If SchedulerServlet receives a JSON file, parse then store it to the database
-        // Else SchedulerServlet prepares a JSON file to send to the client with
-        // data about the current user
-        if (request.getHeader("Purpose").toLowerCase().contains("modify")) {
-            JSONParser parser = new JSONParser();
-            try {
-                //Parse JSON
-                JSONObject jobj = (JSONObject) parser.parse(sb.toString());
-                String startDate = (String) jobj.get("startDate");
-                String endDate = (String) jobj.get("endDate");
-                String minTime = (String) jobj.get("minTime");
-                String maxTime = (String) jobj.get("maxTime");
-                JSONArray events = (JSONArray) jobj.get("events");
-                
-                //Convert JSON to Database Detail Objects
-                ArrayList<ActivityDetails> activities = getActivityDetails(events);
-                ScheduleDetails schedule = getSchedFromData(startDate, endDate, minTime, maxTime, activities);
-                
-                //Store to DB
-                storeDB(request, response, schedule, activities);
-                if(request.getHeader("Schedule-type").equals("update")){
-                    response.getWriter().println("Schedule Saved!");
+        
+        // Check request header to determine correct action
+        String purpose = request.getHeader("Purpose");
+        if(purpose != null) {
+            if(purpose.toLowerCase().contains("modify")){
+                JSONParser parser = new JSONParser();
+                try {
+                    //Parse JSON
+                    JSONObject jobj = (JSONObject) parser.parse(sb.toString());
+                    String startDate = (String) jobj.get("startDate");
+                    String endDate = (String) jobj.get("endDate");
+                    String minTime = (String) jobj.get("minTime");
+                    String maxTime = (String) jobj.get("maxTime");
+                    JSONArray events = (JSONArray) jobj.get("events");
+                    
+                    //Convert JSON to Database Detail Objects
+                    ArrayList<ActivityDetails> activities = getActivityDetails(events);
+                    ScheduleDetails schedule = getSchedFromData(startDate, endDate, minTime, maxTime, activities);
+                    
+                    //Store to DB
+                    storeDB(request, response, schedule, activities);
+                    if(request.getHeader("Schedule-type").equals("update")){
+                        response.getWriter().println("Schedule Saved!");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if(request.getHeader("Purpose").toLowerCase().contains("index")) {
-            JSONParser parser = new JSONParser();
-            try {
-                //Parse JSON
-                JSONObject jobj = (JSONObject) parser.parse(sb.toString());
-                String startDate = (String) jobj.get("startDate");
-                String endDate = (String) jobj.get("endDate");
-                String minTime = (String) jobj.get("minTime");
-                String maxTime = (String) jobj.get("maxTime");
-                String slot = (String) jobj.get("slot");
-                
-                String[] activityDT = slot.split("T");
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                int timeSteps = calculateTimeSteps(format, startDate, minTime, maxTime);
-                int index = getIndex(format, startDate + "T" + minTime, activityDT[0] + "T" + minTime, slot, timeSteps);
-                
-                response.getWriter().println(index);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(userSchedtoJson(request));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else if (purpose.toLowerCase().contains("index")) {
+                JSONParser parser = new JSONParser();
+                try {
+                    //Parse JSON
+                    JSONObject jobj = (JSONObject) parser.parse(sb.toString());
+                    String startDate = (String) jobj.get("startDate");
+                    String minTime = (String) jobj.get("minTime");
+                    String maxTime = (String) jobj.get("maxTime");
+                    String slot = (String) jobj.get("slot");
+                    
+                    String[] activityDT = slot.split("T");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    int timeSteps = calculateTimeSteps(format, startDate, minTime, maxTime);
+                    int index = getIndex(format, startDate + "T" + minTime, activityDT[0] + "T" + minTime, slot, timeSteps);
+                    
+                    response.getWriter().println(index);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (purpose.toLowerCase().contains("fetch")) {
+                try {
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(userSchedtoJson(request));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
