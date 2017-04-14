@@ -91,9 +91,7 @@
 						</div>
 						<div class="row">
 							<div class="col-md-3">
-								<form action="" method="post">
-										<button class="btn btn-medium btn-success" type="submit" name="add_member" value="<%=groups.get(i).getUser_id() %>" >Add Members</button>
-								</form>
+								<button class="btn btn-medium btn-success" type="button" data-toggle="modal" data-target="#addMembers" data-group-id="<%=groups.get(i).getGroup_id() %>" data-username="<%=ad.getUsername() %>">Add Members</button>
 							</div>
 							<div class="col-md-3">
 								<form action="" method="post">
@@ -119,9 +117,35 @@
 	</div>
 </div>
 
+<div class="modal fade" id="addMembers" tabindex="-1" role="dialog" aria-labelledby="addMembersModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<input name="groupId"></input>
+				<input name="username"></input>
+				
+				<h4 class="modal-title" id="myModalLabel">Add Members to </h4>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$('#addMembers').on('show.bs.modal', function(e) {
+
+    //get data-id attribute of the clicked element
+    var groupId = $(e.relatedTarget).data('group-id');
+    var username = $(e.relatedTarget).data('username');
+    console.log(groupId);
+    //populate the textbox
+    $(e.currentTarget).find('input[name="groupId"]').val(groupId);
+    $(e.currentTarget).find('input[name="username"]').val(username);
+});
+</script>
 </body>
 </html>

@@ -5,3 +5,4 @@ $(document).ready(function(){
 $(document).ready(function(){
     $('#nav-here2').load('navbar2.html');
 });
+
