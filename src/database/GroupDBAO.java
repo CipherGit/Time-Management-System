@@ -184,6 +184,49 @@ public class GroupDBAO {
     	return groupOfUser;
     }
     
+    public boolean deleteMembers(int user_id) {
+    	try {
+			Statement stmt = con.createStatement();
+			String query = "DELETE FROM "+user_group_table+" WHERE "+col_user_id+" = "+user_id+"";
+			stmt.executeUpdate(query);
+			stmt.close();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+    }
     
+    public boolean deleteAllMembers(int group_id) {
+    	try {
+			Statement stmt = con.createStatement();
+			String query = "DELETE FROM "+user_group_table+" WHERE "+col_group_id+" = "+group_id+"";
+			stmt.executeUpdate(query);
+			stmt.close();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+    }
+    
+    public int getId() {
+    	int group_id = -1;
+    	try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT LAST_INSERT_ID()";
+			ResultSet rs = stmt.executeQuery(query);
+			stmt.close();
+			while(rs.next()) {
+				group_id = Integer.parseInt(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return group_id;
+    }
     
 }

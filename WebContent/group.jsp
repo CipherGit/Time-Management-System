@@ -57,6 +57,10 @@
 							out.print("<script type=\"text/javascript\">alert('Error adding members!');</script>");
 							session.setAttribute("members_status", "normal");
 						}
+						else if(members_status.equals("Deleted")) {
+							out.print("<script type=\"text/javascript\">alert('Members deleted!');</script>");
+							session.setAttribute("members_status", "normal");
+						}
 					}
 					session.setAttribute("fromShowGroups", "false");
 				}

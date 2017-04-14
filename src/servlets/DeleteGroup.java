@@ -40,6 +40,7 @@ public class DeleteGroup extends HttpServlet {
 		try {
 			GroupDBAO group = new GroupDBAO();
 			boolean result = group.deleteGroup(Integer.parseInt(delete_group));
+			result = group.deleteAllMembers(Integer.parseInt(delete_group));
 			if(result == true) {
 				session.setAttribute("group_status", "Deleted");
 				AccountDBAO account = new AccountDBAO();
