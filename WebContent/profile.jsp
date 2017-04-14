@@ -77,7 +77,7 @@
 						<%for(int i=0; i<friends_details.size(); i++) { %>
 							<form action="DeleteFriend" method="post">
 								<a href="#" class="list-group-item"><%=friends_details.get(i).getName() %>
-								<button class="btn btn-xs btn-danger" style="float:right;" type="submit" name="delete_user" value="<%=friends_details.get(i).getUsername() %>" >Delete</button>
+								<button class="btn btn-xs btn-danger" style="float:right;" type="submit" name="delete_user" value="<%=friends_details.get(i).getUsername() %>" >Remove</button>
 								</a>
 								
 							</form>
