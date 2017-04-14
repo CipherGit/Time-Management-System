@@ -93,8 +93,8 @@ public class GroupDBAO {
 			ResultSet rs = stmt.executeQuery(query);
 			stmt.close();
 			while(rs.next()) {
-				String group_id = rs.getString(1);
 				GroupDetails group = new GroupDetails();
+				group.setGroup_id(Integer.parseInt(rs.getString(1)));
 				group.setName(rs.getString(2));
 				group.setDescription(rs.getString(3));
 				group.setUser_id(Integer.parseInt(rs.getString(4)));

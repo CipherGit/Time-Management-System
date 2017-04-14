@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List" %>
 <%@ page import="database.AccountDetails" %>
+<%@ page import="database.GroupDetails" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
@@ -18,6 +19,7 @@
 	String status = (String) session.getAttribute("status");
 	String add_group = (String) session.getAttribute("add_group");
 	AccountDetails ad = (AccountDetails) session.getAttribute("ad");
+	List<GroupDetails> groups = (List<GroupDetails>) session.getAttribute("groups");
 	if(status != null) {
 		if(status.equals("Login_Success")) {
 			System.out.println("Login_Success");
@@ -54,22 +56,55 @@
 			<button type="submit" class="btn btn-medium btn-primary">Create Group</button>
 		</form>
 		<h2>Your Groups:</h2>
+		<%if(ad != null) { %>
+		<%if(groups.size() > 0) { %>
+		<%for(int i=0; i<groups.size(); i++) { %>
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
 			<div class="panel panel-primary">
-				<div class="panel-heading" role="tab" id="heading">
+				<div class="panel-heading" role="tab" id="heading<%=i%>">
 					<h4 class="panel-title">
-						<a class="collapsed" role="button" data-toggle="collapse" href="#collapse"  aria-expanded="false" aria-controls="collapse">
-									Title Here
+						<a class="collapsed" role="button" data-toggle="collapse" href="#collapse<%=i%>"  aria-expanded="false" aria-controls="collapse<%=i%>">
+									<%=groups.get(i).getName() %>
 							</a>
 					</h4>
 				</div>
-				<div id="collapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading">
+				<div id="collapse<%=i%>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%=i%>">
 					<div class="panel-body">
-						Text Here
+						<h3>Description:</h3>
+						<p><%=groups.get(i).getDescription() %></p>
+						<h3>Group Schedule:</h3>
+						<div>
+							<!-- insert group schedule here -->
+							<%=groups.get(i).getGroup_sched() %>
+						
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<form action="" method="post">
+										<button class="btn btn-medium btn-success" type="submit" name="add_member" value="<%=groups.get(i).getUser_id() %>" >Add Members</button>
+								</form>
+							</div>
+							<div class="col-md-3">
+								<form action="" method="post">
+										<button class="btn btn-medium btn-warning" type="submit" name="delete_member" value="<%=groups.get(i).getUser_id() %>" >Delete Members</button>
+								</form>
+							</div>
+							<div class="col-md-3">
+								<form action="DeleteGroup" method="post">
+										<button class="btn btn-medium btn-danger" type="submit" name="delete_group" value="<%=groups.get(i).getGroup_id() %>" >Delete Group</button>
+								</form>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<%} %>
+		<%}
+		else {%>
+		<h3>You don't have any groups. You can create one then add your friends!</h3>
+		<%} %>
+		<%} %>
 	</div>
 </div>
 

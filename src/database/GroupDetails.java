@@ -1,6 +1,7 @@
 package database;
 
 public class GroupDetails {
+	private int group_id;
 	private String name;
 	private String description;
 	private int user_id;
@@ -15,6 +16,14 @@ public class GroupDetails {
 		this.description = d;
 		this.user_id = uid;
 		this.group_sched = gsched;
+	}
+	
+	public int getGroup_id() {
+		return group_id;
+	}
+
+	public void setGroup_id(int group_id) {
+		this.group_id = group_id;
 	}
 	
 	public String getName() {

@@ -72,7 +72,7 @@
 			<div class="col-md-6">
 				<p>Friends:</p>
 				<div class="list-group">
-				<%if(friends_details != null) { %>
+				<%if(friends_details.size() > 0) { %>
 					<%for(int i=0; i<friends_details.size(); i++) { %>
 						<form action="DeleteFriend" method="post">
 							<a href="#" class="list-group-item"><%=friends_details.get(i).getName() %>
