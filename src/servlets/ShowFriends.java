@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import database.AccountDBAO;
 import database.AccountDetails;
 import database.FriendDBAO;
+import database.GroupDBAO;
 
 /**
  * Servlet implementation class ShowFriends
@@ -45,6 +46,16 @@ public class ShowFriends extends HttpServlet {
 			for(int i=0; i<friends2.size(); i++) {
 				friends.add(friends2.get(i));
 			}
+			GroupDBAO group = new GroupDBAO();
+			List<Integer> usersInGroup = group.getUsersInGroup(Integer.parseInt(group_id));
+			for(int i=0; i<usersInGroup.size(); i++) {
+				for(int j=0; j<friends.size(); j++) {
+					if(friends.get(j) == usersInGroup.get(i)) {
+						friends.remove(j);
+					}
+				}
+			}
+			
 			response.setContentType("text/html;charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.println("<div class=\"checkbox\">");
@@ -60,6 +71,8 @@ public class ShowFriends extends HttpServlet {
 			out.println("</div>");
 			out.println("<input name=\"group_id\" value=\""+group_id+"\" style=\"display:none;\">");
 			
+			account.remove();
+			group.remove();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

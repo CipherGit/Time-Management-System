@@ -47,11 +47,11 @@ public class AddMembers extends HttpServlet {
 			System.out.println("check");
 			if(result==true) {
 				session.setAttribute("members_status", "Added");
-				response.sendRedirect("group.jsp");	
+				response.sendRedirect("ShowGroups");	
 			}
 			else {
 				session.setAttribute("members_status", "Error");
-				response.sendRedirect("group.jsp");
+				response.sendRedirect("ShowGroups");
 			}
 			
 		} catch (Exception e) {

@@ -160,5 +160,30 @@ public class GroupDBAO {
 		
 	}
     
+    public List<GroupDetails> getGroupsOfUser(int user_id) {
+    	List<GroupDetails> groupOfUser = new ArrayList<GroupDetails>();
+    	try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT * FROM "+user_group_table+", "+group_table+" WHERE "+user_group_table+"."+col_group_id+" = "+group_table+"."+col_group_id+" AND "+user_group_table+"."+col_user_id+" = "+user_id+"";
+			ResultSet rs = stmt.executeQuery(query);
+			stmt.close();
+			while(rs.next()) {
+				GroupDetails gd = new GroupDetails();
+				gd.setGroup_id(Integer.parseInt(rs.getString(3)));
+				gd.setName(rs.getString(4));
+				gd.setDescription(rs.getString(5));
+				gd.setUser_id(Integer.parseInt(rs.getString(6)));
+				gd.setGroup_sched(rs.getString(7));
+				groupOfUser.add(gd);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return groupOfUser;
+    }
+    
+    
     
 }

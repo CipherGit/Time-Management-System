@@ -17,6 +17,7 @@
 <body>
 <%
 	String status = (String) session.getAttribute("status");
+	String fromShowGroups = (String) session.getAttribute("fromShowGroups");
 	String add_group = (String) session.getAttribute("add_group");
 	String group_status = (String) session.getAttribute("group_status");
 	String members_status = (String) session.getAttribute("members_status");
@@ -25,35 +26,46 @@
 	if(status != null) {
 		if(status.equals("Login_Success")) {
 			System.out.println("Login_Success");
-			if(add_group != null) {
-				if(add_group.equals("Positive")) {
-					out.print("<script type=\"text/javascript\">alert('Group created!');</script>");
-					session.setAttribute("add_group", "normal");
+			if(fromShowGroups != null) {
+				if(fromShowGroups.equals("true")) {
+					if(add_group != null) {
+						if(add_group.equals("Positive")) {
+							out.print("<script type=\"text/javascript\">alert('Group created!');</script>");
+							session.setAttribute("add_group", "normal");
+						}
+						else if(add_group.equals("Negative")) {
+							out.print("<script type=\"text/javascript\">alert('Error creating group!');</script>");
+							session.setAttribute("add_group", "normal");
+						}
+					}
+					if(group_status != null) {
+						if(group_status.equals("Deleted")) {
+							out.print("<script type=\"text/javascript\">alert('Group deleted!');</script>");
+							session.setAttribute("group_status", "normal");
+						}
+						else if(group_status.equals("Error")) {
+							out.print("<script type=\"text/javascript\">alert('Error deleting group!');</script>");
+							session.setAttribute("group_status", "normal");
+						}
+					}
+					if(members_status != null) {
+						if(members_status.equals("Added")) {
+							out.print("<script type=\"text/javascript\">alert('Members added!');</script>");
+							session.setAttribute("members_status", "normal");
+						}
+						else if(members_status.equals("Error")) {
+							out.print("<script type=\"text/javascript\">alert('Error adding members!');</script>");
+							session.setAttribute("members_status", "normal");
+						}
+					}
+					session.setAttribute("fromShowGroups", "false");
 				}
-				else if(add_group.equals("Negative")) {
-					out.print("<script type=\"text/javascript\">alert('Error creating group!');</script>");
-					session.setAttribute("add_group", "normal");
+				else {
+					response.sendRedirect("profile.jsp");
 				}
 			}
-			if(group_status != null) {
-				if(group_status.equals("Deleted")) {
-					out.print("<script type=\"text/javascript\">alert('Group deleted!');</script>");
-					session.setAttribute("group_status", "normal");
-				}
-				else if(group_status.equals("Error")) {
-					out.print("<script type=\"text/javascript\">alert('Error deleting group!');</script>");
-					session.setAttribute("group_status", "normal");
-				}
-			}
-			if(members_status != null) {
-				if(members_status.equals("Added")) {
-					out.print("<script type=\"text/javascript\">alert('Members added!');</script>");
-					session.setAttribute("members_status", "normal");
-				}
-				else if(members_status.equals("Error")) {
-					out.print("<script type=\"text/javascript\">alert('Error adding members!');</script>");
-					session.setAttribute("members_status", "normal");
-				}
+			else {
+				response.sendRedirect("profile.jsp");
 			}
 		}
 		else {
@@ -105,9 +117,7 @@
 								<button class="btn btn-medium btn-success" type="button" data-toggle="modal" data-target="#addMembers" data-group-id="<%=groups.get(i).getGroup_id() %>" data-username="<%=ad.getUsername() %>">Add Members</button>
 							</div>
 							<div class="col-md-3">
-								<form action="" method="post">
-										<button class="btn btn-medium btn-warning" type="submit" name="delete_member" value="<%=groups.get(i).getUser_id() %>" >Delete Members</button>
-								</form>
+								<button class="btn btn-medium btn-warning" type="button" data-toggle="modal" data-target="#showMembers" data-group-id="<%=groups.get(i).getGroup_id() %>" data-username="<%=ad.getUsername() %>">Show Members</button>
 							</div>
 							<div class="col-md-3">
 								<form action="DeleteGroup" method="post">
@@ -149,6 +159,27 @@
 	</div>
 </div>
 
+<div class="modal fade" id="showMembers" tabindex="-1" role="dialog" aria-labelledby="showMembersModal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Show Members</h4>
+			</div>
+			<form action="DeleteMembers" method="post">
+			<div class="modal-body">
+				<h3>Members:</h3>
+				<div id="membersList"></div>
+			</div>
+			<div class="modal-footer">
+		    	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="submit" class="btn btn-danger" value="Submit">Delete Members</button>
+		    </div>
+		    </form>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
 <script type="text/javascript" src="js/jquery.js"></script>
@@ -166,6 +197,23 @@ $('#addMembers').on('show.bs.modal', function(e) {
     	data: {"groupId":groupId, "username":username},
     	success: function(response) {
     		$('#friendsList').html(response);
+    	}
+    });
+    
+});
+
+$('#showMembers').on('show.bs.modal', function(e) {
+
+    //get data-id attribute of the clicked element
+    var groupId = $(e.relatedTarget).data('group-id');
+    var username = $(e.relatedTarget).data('username');
+ 
+    $.ajax({
+    	type: "POST",
+    	url: "ShowMembers",
+    	data: {"groupId":groupId, "username":username},
+    	success: function(response) {
+    		$('#membersList').html(response);
     	}
     });
     

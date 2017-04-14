@@ -41,10 +41,16 @@ public class ShowGroups extends HttpServlet {
 			int user_id = account.getUserId(ad.getUsername());
 			GroupDBAO group = new GroupDBAO();
 			List<GroupDetails> groups = group.showGroups(user_id);
+			List<GroupDetails> memGroups = group.getGroupsOfUser(user_id);
+			for(int i=0; i<memGroups.size(); i++) {
+				groups.add(memGroups.get(i));
+			}	
 			session.setAttribute("groups", groups);
+			session.setAttribute("fromShowGroups", "true");
 			response.sendRedirect("group.jsp");
 			account.remove();
 			group.remove();
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
