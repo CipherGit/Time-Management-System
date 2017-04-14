@@ -113,7 +113,6 @@
 						<h3>Group Schedule:</h3>
 						<div>
 							<!-- insert group schedule here -->
-							<%=groups.get(i).getGroup_sched() %>
 						
 						</div>
 						<div class="row">
