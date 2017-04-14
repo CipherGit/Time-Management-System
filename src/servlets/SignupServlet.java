@@ -1,7 +1,7 @@
 package servlets;
 
 import java.io.IOException;
-import java.util.Date;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +12,10 @@ import javax.servlet.http.HttpSession;
 
 import database.AccountDBAO;
 import database.AccountDetails;
-import database.ScheduleDBAO;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.math.BigInteger;
 
 /**
  * Servlet implementation class SingupServlet
@@ -36,8 +39,21 @@ public class SignupServlet extends HttpServlet {
 		
 		HttpSession session = request.getSession(true);		
 		AccountDetails ad = new AccountDetails();
+		String password = request.getParameter("inputPassword");
+		String salt = "InternetProgrammingJustinKarlXuanBoss0987654321";
+		MessageDigest messageDigest=null;
+		try {
+			messageDigest = MessageDigest.getInstance("SHA");
+			messageDigest.update((password+salt).getBytes());
+		} catch (NoSuchAlgorithmException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		String encryptedPass = (new BigInteger(messageDigest.digest())).toString(16);
+		
 		ad.setUsername(request.getParameter("inputUsername"));
-		ad.setPassword(request.getParameter("inputPassword"));
+		ad.setPassword(encryptedPass);
 		ad.setName(request.getParameter("inputName"));
 		ad.setEmail(request.getParameter("inputEmail"));
 

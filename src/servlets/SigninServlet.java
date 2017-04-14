@@ -1,7 +1,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +14,10 @@ import javax.servlet.http.HttpSession;
 import database.AccountDBAO;
 import database.AccountDetails;
 import database.FriendDBAO;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.math.BigInteger;
 
 /**
  * Servlet implementation class LoginServlet
@@ -39,9 +42,22 @@ public class SigninServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		String username= request.getParameter("inputUsername");        
 		String password = request.getParameter("inputPassword");
+		String salt = "InternetProgrammingJustinKarlXuanBoss0987654321";
+		MessageDigest messageDigest=null;
+		try {
+			messageDigest = MessageDigest.getInstance("SHA");
+			messageDigest.update((password+salt).getBytes());
+		} catch (NoSuchAlgorithmException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		String encryptedPass = (new BigInteger(messageDigest.digest())).toString(16);
+		
+		
 		try {
 			AccountDBAO account = new AccountDBAO();
-			AccountDetails ad = account.loginCheck(username, password);
+			AccountDetails ad = account.loginCheck(username, encryptedPass);
 			if(ad != null) {
 				session.setAttribute("status", "Login_Success");
 				session.setAttribute("ad", ad);
