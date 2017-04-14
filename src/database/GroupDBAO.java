@@ -11,7 +11,6 @@ public class GroupDBAO {
     private String col_name = "name";
     private String col_desc = "description";
     private String col_user_id = "user_id";
-    private String col_group_sched = "group_sched";
     
     private String user_group_table = "user_group";
     
@@ -70,12 +69,11 @@ public class GroupDBAO {
     public boolean addGroup(GroupDetails gd) {
     	try {
     		getConnection();
-			String query = "INSERT INTO "+group_table+"("+col_name+", "+col_desc+", "+col_user_id+", "+col_group_sched+") VALUES (?,?,?,?)";
+			String query = "INSERT INTO "+group_table+"("+col_name+", "+col_desc+", "+col_user_id+") VALUES (?,?,?)";
 			PreparedStatement stmt = con.prepareStatement(query);
 			stmt.setString(1, gd.getName());
 			stmt.setString(2, gd.getDescription());
 			stmt.setInt(3, gd.getUser_id());
-			stmt.setString(4,gd.getGroup_sched());
 			stmt.executeUpdate();
 			stmt.close();
 			return true;
@@ -150,7 +148,6 @@ public class GroupDBAO {
 				gd.setName(rs.getString(4));
 				gd.setDescription(rs.getString(5));
 				gd.setUser_id(Integer.parseInt(rs.getString(6)));
-				gd.setGroup_sched(rs.getString(7));
 				groupOfUser.add(gd);
 			}
 			
@@ -175,11 +172,11 @@ public class GroupDBAO {
 		}
     }
     
-    public int getGroupId(String name, String desc, int user_id, String schedule) {
+    public int getGroupId(String name, String desc, int user_id) {
     	int group_id = -1;
     	try {
 			Statement stmt = con.createStatement();
-			String query = "SELECT "+col_group_id+" FROM "+group_table+" WHERE "+col_name+" = '"+name+"' AND "+col_desc+" = '"+desc+"' AND "+col_user_id+" = "+user_id+" AND "+col_group_sched+" = '"+schedule+"'";
+			String query = "SELECT "+col_group_id+" FROM "+group_table+" WHERE "+col_name+" = '"+name+"' AND "+col_desc+" = '"+desc+"' AND "+col_user_id+" = "+user_id+"";
 			ResultSet rs = stmt.executeQuery(query);
 			stmt.close();
 			while(rs.next()) {

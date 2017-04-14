@@ -5,17 +5,15 @@ public class GroupDetails {
 	private String name;
 	private String description;
 	private int user_id;
-	private String group_sched;
 	
 	public GroupDetails() {
 		
 	}
 	
-	public GroupDetails (String n, String d, int uid, String gsched) {
+	public GroupDetails (String n, String d, int uid) {
 		this.name = n;
 		this.description = d;
 		this.user_id = uid;
-		this.group_sched = gsched;
 	}
 	
 	public int getGroup_id() {
@@ -50,12 +48,5 @@ public class GroupDetails {
 		this.user_id = user_id;
 	}
 
-	public String getGroup_sched() {
-		return group_sched;
-	}
-
-	public void setGroup_sched(String group_sched) {
-		this.group_sched = group_sched;
-	}
 
 }
