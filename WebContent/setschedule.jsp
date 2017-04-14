@@ -11,6 +11,8 @@
 
 <link rel="stylesheet" href="css/main.css">
 <link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.3.1/fullcalendar.min.css'/>
+<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.3.1/fullcalendar.print.css' media='print'/>
 </head>
 <body>
 <%
@@ -43,11 +45,9 @@
 <div id="nav-here"></div>
 <div class="container">
 	<h2 style="text-align:center;">Set Your Schedule:</h2>
-	<!-- insert code here -->
-
-	<form class="form-schedule" action="NewUser" method="post">
-		<button class="btn btn-lg btn-primary btn-block" type="submit">Finish</button>
-	</form>
+	<div id="calendar"></div>
+	
+	<button class="form-schedule btn btn-lg btn-primary btn-block" onclick="sendJSON()">Finish</button>
 
 </div>
 
@@ -55,5 +55,8 @@
 <script type="text/javascript" src="js/main.js"></script>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js'></script>
+<script type="text/javascript" src='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.3.1/fullcalendar.min.js'></script>
+<script type="text/javascript" src='js/newScheduler.js'></script>
 </body>
 </html>

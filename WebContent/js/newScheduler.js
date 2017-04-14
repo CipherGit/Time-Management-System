@@ -21,17 +21,17 @@ function sendJSON() {
         events: newEvents
     }
     var jsonObj = JSON.stringify(calendarData);
-    console.log(jsonObj)
 
     //Send Data to Servlet
     xhr = new XMLHttpRequest();
     var url = "SchedulerServlet";
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader("Schedule-type", "new");
     xhr.onreadystatechange = function() {
         if (this.readyState !== 4) return; // not ready yet
         if (this.status === 200) { // HTTP 200 OK
-            alert(this.responseText);
+            window.location.replace(this.responseText);
         }
     };
     xhr.send(jsonObj);

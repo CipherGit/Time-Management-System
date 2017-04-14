@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
 
 import database.AccountDBAO;
@@ -37,18 +38,8 @@ public class NewUser extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
-		String indiv_sched = ""; //insert schedule value here
-		int schedule_id = -1;
-		try {
-			ScheduleDBAO schedule = new ScheduleDBAO();
-			schedule.addSchedule(indiv_sched);
-			schedule_id = schedule.getId();
-			schedule.remove();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-				
+		
+		int schedule_id = Integer.parseInt(response.getHeader("sched_id"));		
 		AccountDetails ad = new AccountDetails();
 		ad = (AccountDetails) session.getAttribute("ad");
 		ad.setSchedule_id(schedule_id);
@@ -60,14 +51,14 @@ public class NewUser extends HttpServlet {
 			if (result){
 				session.setAttribute("status", "Account_Added");
 				session.setAttribute("ad", ad);
-				response.sendRedirect("profile.jsp");
 				account.remove();
+				response.getWriter().println("profile.jsp");
 				return;
 			}
 			else {
 				session.setAttribute("status", "Account_Failed");
-				response.sendRedirect("setschedule.jsp");
 				account.remove();
+				response.getWriter().println("setschedule.jsp");
 				return;
 			}
 		}

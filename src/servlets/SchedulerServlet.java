@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -86,8 +87,10 @@ public class SchedulerServlet extends HttpServlet {
                 ScheduleDetails schedule = getSchedFromData(startDate, endDate, minTime, maxTime, activities);
                 
                 //Store to DB
-                storeDB(request, schedule, activities);
-                response.getWriter().println("Schedule Saved!");
+                storeDB(request, response, schedule, activities);
+                if(request.getHeader("Schedule-type").equals("update")){
+                    response.getWriter().println("Schedule Saved!");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -168,7 +171,6 @@ public class SchedulerServlet extends HttpServlet {
                 }
             }
         }
-
         ScheduleDetails scheduleDetail = new ScheduleDetails();
         scheduleDetail.setIndiv_sched(generateSchedString(schedule));
         return scheduleDetail;
@@ -210,7 +212,7 @@ public class SchedulerServlet extends HttpServlet {
      * storeDB - stores schedule and activities in the DB
      * @throws Exception 
      */
-    private void storeDB(HttpServletRequest request, ScheduleDetails schedule, ArrayList<ActivityDetails> activities) throws Exception{
+    private void storeDB(HttpServletRequest request, HttpServletResponse response, ScheduleDetails schedule, ArrayList<ActivityDetails> activities) throws Exception{
         //Retrieve User Details
         HttpSession session = request.getSession(true);
         AccountDetails ad = (AccountDetails) session.getAttribute("ad");
@@ -225,6 +227,12 @@ public class SchedulerServlet extends HttpServlet {
             schedDBAO.updateSchedule(ad.getSchedule_id(), schedule.getIndiv_sched());
             activityDBAO.deleteAllForSched(ad.getSchedule_id());
             activityDBAO.addActivities(ad.getSchedule_id(), activities);
+        }
+        
+        if(request.getHeader("Schedule-type").equals("new")){
+            RequestDispatcher rd = request.getRequestDispatcher("NewUser");
+            response.setIntHeader("sched_id", schedDBAO.getId());
+            rd.forward(request, response);
         }
         
         schedDBAO.remove();
