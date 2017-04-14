@@ -40,11 +40,7 @@ public class ShowGroups extends HttpServlet {
 			AccountDBAO account = new AccountDBAO();
 			int user_id = account.getUserId(ad.getUsername());
 			GroupDBAO group = new GroupDBAO();
-			List<GroupDetails> groups = group.showGroups(user_id);
-			List<GroupDetails> memGroups = group.getGroupsOfUser(user_id);
-			for(int i=0; i<memGroups.size(); i++) {
-				groups.add(memGroups.get(i));
-			}	
+			List<GroupDetails> groups = group.getGroupsOfUser(user_id);
 			session.setAttribute("groups", groups);
 			session.setAttribute("fromShowGroups", "true");
 			response.sendRedirect("group.jsp");

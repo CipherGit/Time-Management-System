@@ -45,19 +45,20 @@ public class NewGroup extends HttpServlet {
 			GroupDBAO group = new GroupDBAO();
 			GroupDetails gd = new GroupDetails(groupName, groupDesc, user_id, groupSched);
 			boolean result = group.addGroup(gd);
+			int group_id = group.getGroupId(groupName, groupDesc, user_id, groupSched);
+			account.remove();
+			group.remove();
 			if(result == true) {
+				GroupDBAO group1 = new GroupDBAO();
+				group1.addUserToGroup(user_id, group_id);
+				group1.remove();
 				session.setAttribute("add_group", "Positive");
-				List<GroupDetails> groups = group.showGroups(user_id);
-				session.setAttribute("groups", groups);
-				response.sendRedirect("group.jsp");
-				account.remove();
-				group.remove();
+				response.sendRedirect("ShowGroups");
+				
 			}
 			else {
 				session.setAttribute("add_group", "Negative");
-				response.sendRedirect("group.jsp");
-				account.remove();
-				group.remove();
+				response.sendRedirect("ShowGroups");
 			}
 			
 		} catch (Exception e) {

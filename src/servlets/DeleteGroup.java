@@ -40,20 +40,19 @@ public class DeleteGroup extends HttpServlet {
 		try {
 			GroupDBAO group = new GroupDBAO();
 			boolean result = group.deleteGroup(Integer.parseInt(delete_group));
-			result = group.deleteAllMembers(Integer.parseInt(delete_group));
 			if(result == true) {
 				session.setAttribute("group_status", "Deleted");
 				AccountDBAO account = new AccountDBAO();
 				int user_id = account.getUserId(ad.getUsername());
 				List<GroupDetails> groups = group.showGroups(user_id);
 				session.setAttribute("groups", groups);
-				response.sendRedirect("group.jsp");
+				response.sendRedirect("ShowGroups");
 				account.remove();
 				group.remove();
 			}
 			else {
 				session.setAttribute("group_status", "Error");
-				response.sendRedirect("group.jsp");
+				response.sendRedirect("ShowGroups");
 				group.remove();
 			}
 		} catch (Exception e) {
