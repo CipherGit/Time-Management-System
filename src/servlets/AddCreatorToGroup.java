@@ -6,6 +6,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import database.AccountDBAO;
+import database.AccountDetails;
+import database.GroupDBAO;
 
 /**
  * Servlet implementation class AddCreatorToGroup
@@ -26,8 +31,29 @@ public class AddCreatorToGroup extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		HttpSession session = request.getSession(true);
+		AccountDetails ad = (AccountDetails) session.getAttribute("ad");
+		int group_id = (Integer) session.getAttribute("newGroupId");
+		try {
+			AccountDBAO account = new AccountDBAO();
+			int user_id = account.getUserId(ad.getUsername());
+			GroupDBAO group = new GroupDBAO();
+			boolean result = group.addUserToGroup(user_id, group_id);
+			account.remove();
+			group.remove();
+			if(result==true) {
+				session.setAttribute("newGroupId", null);
+				response.sendRedirect("ShowGroups");
+			}
+			else {
+				session.setAttribute("newGroupId", null);
+				System.out.println("Error!");
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

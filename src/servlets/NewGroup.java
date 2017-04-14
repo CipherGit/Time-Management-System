@@ -49,11 +49,9 @@ public class NewGroup extends HttpServlet {
 			account.remove();
 			group.remove();
 			if(result == true) {
-				GroupDBAO group1 = new GroupDBAO();
-				group1.addUserToGroup(user_id, group_id);
-				group1.remove();
+				session.setAttribute("newGroupId", group_id);
 				session.setAttribute("add_group", "Positive");
-				response.sendRedirect("ShowGroups");
+				response.sendRedirect("AddCreatorToGroup");
 				
 			}
 			else {
