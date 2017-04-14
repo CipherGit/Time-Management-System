@@ -6,6 +6,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import database.AccountDBAO;
+import database.GroupDBAO;
 
 /**
  * Servlet implementation class AddMembers
@@ -26,13 +30,34 @@ public class AddMembers extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession(true);
 		String[] members = request.getParameterValues("members");
 		String group_id = request.getParameter("group_id");
-		for(int i=0; i<members.length;i++) {
-			System.out.println(members[i]);
+		boolean result = false;
+		try {
+			AccountDBAO account = new AccountDBAO();
+			GroupDBAO group = new GroupDBAO();
+			for(int i=0; i<members.length;i++) {
+				int user_id = account.getUserId(members[i]);
+				result = group.addUserToGroup(user_id, Integer.parseInt(group_id));
+			}
+			if(result==true) {
+				session.setAttribute("members_status", "Added");
+				response.sendRedirect("group.jsp");
+				account.remove();
+				group.remove();
+			}
+			else {
+				session.setAttribute("members_status", "Error");
+				response.sendRedirect("group.jsp");
+				account.remove();
+				group.remove();
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		System.out.println(group_id);
-		
 	}
 
 	/**

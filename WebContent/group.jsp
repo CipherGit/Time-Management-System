@@ -19,6 +19,7 @@
 	String status = (String) session.getAttribute("status");
 	String add_group = (String) session.getAttribute("add_group");
 	String group_status = (String) session.getAttribute("group_status");
+	String members_status = (String) session.getAttribute("members_status");
 	AccountDetails ad = (AccountDetails) session.getAttribute("ad");
 	List<GroupDetails> groups = (List<GroupDetails>) session.getAttribute("groups");
 	if(status != null) {
@@ -42,6 +43,16 @@
 				else if(group_status.equals("Error")) {
 					out.print("<script type=\"text/javascript\">alert('Error deleting group!');</script>");
 					session.setAttribute("group_status", "normal");
+				}
+			}
+			if(members_status != null) {
+				if(members_status.equals("Added")) {
+					out.print("<script type=\"text/javascript\">alert('Members added!');</script>");
+					session.setAttribute("members_status", "normal");
+				}
+				else if(members_status.equals("Error")) {
+					out.print("<script type=\"text/javascript\">alert('Error adding members!');</script>");
+					session.setAttribute("members_status", "normal");
 				}
 			}
 		}

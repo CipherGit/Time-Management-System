@@ -123,5 +123,42 @@ public class GroupDBAO {
 		}
     }
     
+    public boolean addUserToGroup(int user_id, int group_id) {
+		try {
+			getConnection();
+			String query = "INSERT INTO "+user_group_table+"("+col_user_id+", "+col_group_id+") VALUES (?,?)";
+			PreparedStatement stmt = con.prepareStatement(query);
+			stmt.setInt(1, user_id);
+			stmt.setInt(2, group_id);
+			stmt.executeUpdate();
+			stmt.close();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+    }
+    
+    public List<Integer> getUsersInGroup(int group_id) {
+    	List<Integer> usersInGroup = new ArrayList<Integer>();
+		try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT "+col_user_id+" FROM "+user_group_table+" WHERE "+col_group_id+" = "+group_id+"";
+			ResultSet rs = stmt.executeQuery(query);
+			stmt.close();
+			while(rs.next()) {
+				int user_id = Integer.parseInt(rs.getString(1));
+				usersInGroup.add(user_id);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return usersInGroup;
+		
+	}
+    
     
 }
