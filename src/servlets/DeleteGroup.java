@@ -44,7 +44,7 @@ public class DeleteGroup extends HttpServlet {
 				session.setAttribute("group_status", "Deleted");
 				AccountDBAO account = new AccountDBAO();
 				int user_id = account.getUserId(ad.getUsername());
-				List<GroupDetails> groups = group.showGroups(user_id);
+				List<GroupDetails> groups = group.getGroupsOfUser(user_id);
 				session.setAttribute("groups", groups);
 				response.sendRedirect("ShowGroups");
 				account.remove();

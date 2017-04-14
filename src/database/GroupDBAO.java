@@ -85,30 +85,7 @@ public class GroupDBAO {
 			return false;
 		}
     }
-    
-    public List<GroupDetails> showGroups(int user_id) {
-    	List<GroupDetails> groups = new ArrayList<GroupDetails>();
-    	try {
-			Statement stmt = con.createStatement();
-			String query = "SELECT * FROM "+group_table+" WHERE "+col_user_id+" = "+user_id+"";
-			ResultSet rs = stmt.executeQuery(query);
-			stmt.close();
-			while(rs.next()) {
-				GroupDetails group = new GroupDetails();
-				group.setGroup_id(Integer.parseInt(rs.getString(1)));
-				group.setName(rs.getString(2));
-				group.setDescription(rs.getString(3));
-				group.setUser_id(Integer.parseInt(rs.getString(4)));
-				group.setGroup_sched(rs.getString(5));
-				groups.add(group);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	return groups;
-    }
-    
+       
     public boolean deleteGroup(int group_id) {
     	try {
 			Statement stmt = con.createStatement();
