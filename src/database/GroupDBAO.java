@@ -75,10 +75,11 @@ public class GroupDBAO {
 			stmt.setString(2, gd.getDescription());
 			stmt.setInt(3, gd.getUser_id());
 			stmt.executeUpdate();
+			releaseConnection();
 			stmt.close();
 			return true;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			releaseConnection();
 			e.printStackTrace();
 			return false;
 		}
@@ -86,13 +87,16 @@ public class GroupDBAO {
        
     public boolean deleteGroup(int group_id) {
     	try {
-			Statement stmt = con.createStatement();
-			String query = "DELETE FROM "+group_table+" WHERE "+col_group_id+" = "+group_id;
-			stmt.executeUpdate(query);
+    	    getConnection();
+    	    String query = "DELETE FROM "+group_table+" WHERE "+col_group_id+" = ?";
+			PreparedStatement stmt = con.prepareStatement(query);
+			stmt.setInt(1, group_id);
+			stmt.executeUpdate();
+			releaseConnection();
 			stmt.close();
 			return true;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			releaseConnection();
 			e.printStackTrace();
 			return false;
 		}
@@ -105,11 +109,12 @@ public class GroupDBAO {
 			PreparedStatement stmt = con.prepareStatement(query);
 			stmt.setInt(1, user_id);
 			stmt.setInt(2, group_id);
-			stmt.executeUpdate();
+			stmt.executeQuery();
+			releaseConnection();
 			stmt.close();
 			return true;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			releaseConnection();
 			e.printStackTrace();
 			return false;
 		}
@@ -118,9 +123,12 @@ public class GroupDBAO {
     public List<Integer> getUsersInGroup(int group_id) {
     	List<Integer> usersInGroup = new ArrayList<Integer>();
 		try {
-			Statement stmt = con.createStatement();
-			String query = "SELECT "+col_user_id+" FROM "+user_group_table+" WHERE "+col_group_id+" = "+group_id+"";
-			ResultSet rs = stmt.executeQuery(query);
+		    getConnection();
+		    String query = "SELECT "+col_user_id+" FROM "+user_group_table+" WHERE "+col_group_id+" = ?";
+			PreparedStatement stmt = con.prepareStatement(query);
+			stmt.setInt(1,  group_id);
+			ResultSet rs = stmt.executeQuery();
+			releaseConnection();
 			stmt.close();
 			while(rs.next()) {
 				int user_id = Integer.parseInt(rs.getString(1));
@@ -128,7 +136,7 @@ public class GroupDBAO {
 			}
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			releaseConnection();
 			e.printStackTrace();
 		}
 		return usersInGroup;
@@ -138,9 +146,12 @@ public class GroupDBAO {
     public List<GroupDetails> getGroupsOfUser(int user_id) {
     	List<GroupDetails> groupOfUser = new ArrayList<GroupDetails>();
     	try {
-			Statement stmt = con.createStatement();
-			String query = "SELECT * FROM "+user_group_table+", "+group_table+" WHERE "+user_group_table+"."+col_group_id+" = "+group_table+"."+col_group_id+" AND "+user_group_table+"."+col_user_id+" = "+user_id+"";
-			ResultSet rs = stmt.executeQuery(query);
+    	    getConnection();
+    	    String query = "SELECT * FROM "+user_group_table+", "+group_table+" WHERE "+user_group_table+"."+col_group_id+" = "+group_table+"."+col_group_id+" AND "+user_group_table+"."+col_user_id+" = ?";
+			PreparedStatement stmt = con.prepareStatement(query);
+			stmt.setInt(1, user_id);
+			ResultSet rs = stmt.executeQuery();
+			releaseConnection();
 			stmt.close();
 			while(rs.next()) {
 				GroupDetails gd = new GroupDetails();
@@ -152,7 +163,7 @@ public class GroupDBAO {
 			}
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			releaseConnection();
 			e.printStackTrace();
 		}
     	return groupOfUser;
@@ -160,13 +171,16 @@ public class GroupDBAO {
     
     public boolean deleteMembers(int user_id) {
     	try {
-			Statement stmt = con.createStatement();
-			String query = "DELETE FROM "+user_group_table+" WHERE "+col_user_id+" = "+user_id+"";
-			stmt.executeUpdate(query);
+    	    getConnection();
+    	    String query = "DELETE FROM "+user_group_table+" WHERE "+col_user_id+" = ?";
+			PreparedStatement stmt = con.prepareStatement(query);
+			stmt.setInt(1, user_id);
+			stmt.executeUpdate();
+			releaseConnection();
 			stmt.close();
 			return true;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			releaseConnection();
 			e.printStackTrace();
 			return false;
 		}
@@ -175,7 +189,6 @@ public class GroupDBAO {
     public int getGroupId(String name, String desc, int user_id) {
     	int group_id = -1;
     	try {
-    		/*
     		getConnection();
 			String query = "SELECT "+col_group_id+" FROM "+group_table+" WHERE "+col_name+" = ? AND "+col_desc+" = ? AND "+col_user_id+" = ?";
 			PreparedStatement stmt = con.prepareStatement(query);
@@ -183,19 +196,20 @@ public class GroupDBAO {
 			stmt.setString(2, desc);
 			stmt.setInt(3, user_id);
 			ResultSet rs = stmt.executeQuery();
+			releaseConnection();
 			stmt.close();
-			*/
 			
+    	    /*
 			Statement stmt = con.createStatement();
 			String query = "SELECT "+col_group_id+" FROM "+group_table+" WHERE "+col_name+" = '"+name+"' AND "+col_desc+" = '"+desc+"' AND "+col_user_id+" = "+user_id+"";
 			ResultSet rs = stmt.executeQuery(query);
 			stmt.close();
-			
+			*/
 			while(rs.next()) {
 				group_id = Integer.parseInt(rs.getString(1));
 			}
     	} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			releaseConnection();
 			e.printStackTrace();
 		}
     	return group_id;

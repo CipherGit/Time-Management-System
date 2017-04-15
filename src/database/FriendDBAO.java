@@ -64,13 +64,17 @@ public class FriendDBAO {
     
     public boolean addFriend(int user1_id, int user2_id) {
     	try {
-			Statement stmt = con.createStatement();
-			String query = "INSERT INTO "+friends_table+" VALUES ("+user1_id+", "+user2_id+")";
-			stmt.executeUpdate(query);
+    	    getConnection();
+    	    String query = "INSERT INTO "+friends_table+" VALUES (?, ?)";
+			PreparedStatement stmt = con.prepareStatement(query);
+			stmt.setInt(1, user1_id);
+			stmt.setInt(2, user2_id);
+			stmt.executeQuery();
+			releaseConnection();
 			stmt.close();
 			return true;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			releaseConnection();
 			e.printStackTrace();
 			return false;
 		}
@@ -79,16 +83,19 @@ public class FriendDBAO {
     public List<Integer> checkFriends (int user1_id) {
     	List<Integer> friends = new ArrayList<Integer>();
     	try {
-			Statement stmt = con.createStatement();
-			String query = "SELECT "+col_user2_id+" FROM "+friends_table+" WHERE "+col_user1_id+" = "+user1_id+"";
-			ResultSet rs = stmt.executeQuery(query);
+    	    getConnection();
+    	    String query = "SELECT "+col_user2_id+" FROM "+friends_table+" WHERE "+col_user1_id+" = ?";
+			PreparedStatement stmt = con.prepareStatement(query);
+			stmt.setInt(1, user1_id);
+			ResultSet rs = stmt.executeQuery();
+			releaseConnection();
 			stmt.close();
 			while(rs.next()) {
 				friends.add(Integer.parseInt(rs.getString(1)));
 			}
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			releaseConnection();
 			e.printStackTrace();
 		}
     	return friends;
@@ -97,16 +104,19 @@ public class FriendDBAO {
     public List<Integer> checkFriends2 (int user1_id) {
     	List<Integer> friends = new ArrayList<Integer>();
     	try {
-			Statement stmt = con.createStatement();
-			String query = "SELECT "+col_user1_id+" FROM "+friends_table+" WHERE "+col_user2_id+" = "+user1_id+"";
-			ResultSet rs = stmt.executeQuery(query);
+    	    getConnection();
+    	    String query = "SELECT "+col_user1_id+" FROM "+friends_table+" WHERE "+col_user2_id+" = ?";
+			PreparedStatement stmt = con.prepareStatement(query);
+			stmt.setInt(1, user1_id);
+			ResultSet rs = stmt.executeQuery();
+			releaseConnection();
 			stmt.close();
 			while(rs.next()) {
 				friends.add(Integer.parseInt(rs.getString(1)));
 			}
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			releaseConnection();
 			e.printStackTrace();
 		}
     	return friends;
@@ -114,15 +124,23 @@ public class FriendDBAO {
     
     public boolean deleteFriend (int user1_id, int user2_id) {
     	try {
-			Statement stmt = con.createStatement();
-			String query = "DELETE FROM "+friends_table+" WHERE "+col_user1_id+" = "+user1_id+" AND "+col_user2_id+" = "+user2_id+"";
-			String query2 = "DELETE FROM "+friends_table+" WHERE "+col_user1_id+" = "+user2_id+" AND "+col_user2_id+" = "+user1_id+"";
-			stmt.executeUpdate(query);
-			stmt.executeUpdate(query2);
+    	    getConnection();
+            String query = "DELETE FROM "+friends_table+" WHERE "+col_user1_id+" = ? AND "+col_user2_id+" = ?";
+            String query2 = "DELETE FROM "+friends_table+" WHERE "+col_user1_id+" = ? AND "+col_user2_id+" = ?";
+			PreparedStatement stmt = con.prepareStatement(query);
+			stmt.setInt(1, user1_id);
+			stmt.setInt(2, user2_id);
+			PreparedStatement stmt2 = con.prepareStatement(query2);
+	        stmt2.setInt(1, user2_id);
+	        stmt2.setInt(2, user1_id);
+
+			stmt.executeQuery();
+			stmt2.executeQuery();
+			releaseConnection();
 			stmt.close();
 			return true;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			releaseConnection();
 			e.printStackTrace();
 			return false;
 		}
