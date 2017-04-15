@@ -60,6 +60,7 @@
 	<div class="jumbotron">
 	<h3>Result:</h3>
 	<%if(ad != null) { %>
+	<%if(search_status != null) { %>
 	<%if(search_status.equals("Positive")) { %>
 		<%for (int i=0; i<search_results.size(); i++) { %>
 			<%if(!search_results.get(i).getUsername().equals(ad.getUsername())) { %>
@@ -96,6 +97,7 @@
 		<h3>No such user!</h3>
 	
 	<%} 
+	}
 	}
 	%>
 	</div>

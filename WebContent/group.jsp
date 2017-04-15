@@ -95,6 +95,7 @@
 		</form>
 		<h2>Your Groups:</h2>
 		<%if(ad != null) { %>
+		<%if(fromShowGroups != null) { %>
 		<%if(groups.size() > 0) { %>
 		<%for(int i=0; i<groups.size(); i++) { %>
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
@@ -133,6 +134,7 @@
 		<%}
 		else {%>
 		<h3>You don't have any groups. You can create one then add your friends!</h3>
+		<%} %>
 		<%} %>
 		<%} %>
 	</div>
@@ -243,6 +245,7 @@ $('#showMembers').on('show.bs.modal', function(e) {
 
 //Calendar Code
 $(document).ready(function() {
+<%if(fromShowGroups != null) { %>
 <%for(int i=0; i<groups.size(); i++) { %>
 	$('#calendar<%=i%>').fullCalendar({
 	    minTime: minTime,
@@ -268,7 +271,8 @@ $(document).ready(function() {
 	  $('#calendar<%=i%>').fullCalendar('render');
 	});
 	retrieveData(<%=i%>, <%=groups.get(i).getGroup_id() %>)
-<%}%>
+<%}
+}%>
 });
 </script>
 </body>
