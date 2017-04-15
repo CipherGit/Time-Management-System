@@ -175,10 +175,22 @@ public class GroupDBAO {
     public int getGroupId(String name, String desc, int user_id) {
     	int group_id = -1;
     	try {
+    		/*
+    		getConnection();
+			String query = "SELECT "+col_group_id+" FROM "+group_table+" WHERE "+col_name+" = ? AND "+col_desc+" = ? AND "+col_user_id+" = ?";
+			PreparedStatement stmt = con.prepareStatement(query);
+			stmt.setString(1, name);
+			stmt.setString(2, desc);
+			stmt.setInt(3, user_id);
+			ResultSet rs = stmt.executeQuery();
+			stmt.close();
+			*/
+			
 			Statement stmt = con.createStatement();
 			String query = "SELECT "+col_group_id+" FROM "+group_table+" WHERE "+col_name+" = '"+name+"' AND "+col_desc+" = '"+desc+"' AND "+col_user_id+" = "+user_id+"";
 			ResultSet rs = stmt.executeQuery(query);
 			stmt.close();
+			
 			while(rs.next()) {
 				group_id = Integer.parseInt(rs.getString(1));
 			}
