@@ -25,10 +25,11 @@ function retrieveData(i, groupID) {
         events = data[j].events
         for(var k = 0; k<events.length; k++){
           var eventItem = {
+            id: groupMember.name,
             title: events[k].title,
             start: events[k].start,
             end: events[k].end,
-            rendering: 'background',
+            rendering: 'inverse-background',
             backgroundColor: "rgba(0, 255, 0, " + 1/data.length + ")"
           }
           allEvents.push(eventItem);
@@ -74,11 +75,12 @@ function calculateAvailability(i, index){
     var availabilityCount = 0;
     for(var j = 0; j<allData[i].gms.length; j++){
       var availability = parseInt(allData[i].gms[j].schedule[index]);
-      availabilityCount += availability;
       if(availability === 1){
-        available.push(allData[i].gms[j].name);
-      } else {
         unavailable.push(allData[i].gms[j].name);
+        availabilityCount += 0;
+      } else {
+        available.push(allData[i].gms[j].name);
+        availabilityCount += 1;
       }
     }
     modifyModal(i, availabilityCount, available, unavailable)
