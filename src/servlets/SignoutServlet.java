@@ -28,7 +28,10 @@ public class SignoutServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
-		session.setAttribute("status", "normal");
+		if (!session.isNew()) {
+		    session.invalidate();
+		    session = request.getSession();
+		}
 		response.sendRedirect("index.jsp");
 		return;
 	}
