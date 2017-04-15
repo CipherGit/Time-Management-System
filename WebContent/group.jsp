@@ -112,7 +112,7 @@
 						<p><%=groups.get(i).getDescription() %></p>
 						<h3>Group Schedule:</h3>
 						<div id="calendar<%=i%>"></div>
-						<div class="row">
+						<div class="row" style="margin-top:20px;">
 							<div class="col-md-3">
 								<button class="btn btn-medium btn-success" type="button" data-toggle="modal" data-target="#addMembers" data-group-id="<%=groups.get(i).getGroup_id() %>" data-username="<%=ad.getUsername() %>">Add Members</button>
 							</div>

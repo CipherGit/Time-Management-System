@@ -57,3 +57,7 @@ body {
 	max-width: 500px;
 	margin: 0 auto;
 }
+
+.logo {
+	width: 30px;
+}
