@@ -92,7 +92,6 @@ public class GroupSchedulerServlet extends HttpServlet {
 	        JSONArray events = new JSONArray();
 	        for(ActivityDetails activity : activities) {
 	            JSONObject event = new JSONObject();
-	            event.put("id", activity.getActivity_id());
 	            event.put("title", activity.getName());
 	            event.put("start", activity.getStart_date());
 	            event.put("end", activity.getEnd_date());
